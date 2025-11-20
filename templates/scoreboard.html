@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifica - Kodland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="scoreboard-page">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="p-3">
+            <h4><i class="fas fa-code me-2"></i>Kodland</h4>
+            <hr class="border-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/"><i class="fas fa-home me-2"></i>Start</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/homepage"><i class="fas fa-tachometer-alt me-2"></i>Homepage</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/profile"><i class="fas fa-user me-2"></i>Profilo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect active" href="/scoreboard"><i class="fas fa-trophy me-2"></i>Classifica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Accedi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/registration"><i class="fas fa-user-plus me-2"></i>Registrati</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" style="margin-left: 0; transition: margin-left 0.3s;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light me-3" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand fw-bold" href="/"><i class="fas fa-code me-2"></i>Kodland</a>
+                {% if current_user.is_authenticated %}
+                <span class="navbar-text text-white">
+                    <i class="fas fa-user-circle me-1"></i>{{ current_user.nickname }}
+                </span>
+                {% endif %}
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero-section text-white py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <h1 class="display-4 fw-bold mb-3">
+                            <i class="fas fa-trophy me-3 text-warning trophy-icon"></i>Classifica Quiz
+                        </h1>
+                        <p class="lead mb-4">I migliori giocatori di Kodland</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container my-5">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card modern-card border-0 shadow-lg text-center">
+                        <div class="card-body p-4">
+                            <i class="fas fa-users text-primary mb-3" style="font-size: 3rem;"></i>
+                            <h3 class="fw-bold text-primary">{{ players_count }}</h3>
+                            <p class="text-muted mb-0">Giocatori Totali</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card modern-card border-0 shadow-lg text-center">
+                        <div class="card-body p-4">
+                            <i class="fas fa-star text-warning mb-3" style="font-size: 3rem;"></i>
+                            <h3 class="fw-bold text-warning">{{ max_score }}</h3>
+                            <p class="text-muted mb-0">Punteggio Massimo</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card modern-card border-0 shadow-lg text-center">
+                        <div class="card-body p-4">
+                            <i class="fas fa-medal text-success mb-3" style="font-size: 3rem;"></i>
+                            <h3 class="fw-bold text-success">{{ average_score }}</h3>
+                            <p class="text-muted mb-0">Punteggio Medio</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scoreboard Table -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card modern-card border-0 shadow-lg">
+                        <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+                            <h4 class="mb-0"><i class="fas fa-list-ol me-2"></i>Classifica Completa</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if players %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                                            <tr>
+                                                <th scope="col" class="text-center fw-bold" style="width: 80px;">#</th>
+                                                <th scope="col" class="fw-bold">Giocatore</th>
+                                                <th scope="col" class="text-center fw-bold">Punteggio</th>
+                                                <th scope="col" class="text-center fw-bold">Registrato il</th>
+                                                <th scope="col" class="text-center fw-bold">Ultima Attività</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for player in players %}
+                                            <tr class="{% if player.id == current_user.id %}current-user-row{% endif %}">
+                                                <td class="text-center">
+                                                    {% if loop.index <= 3 %}
+                                                        {% if loop.index == 1 %}
+                                                            <i class="fas fa-trophy text-warning" style="font-size: 1.5rem;"></i>
+                                                        {% elif loop.index == 2 %}
+                                                            <i class="fas fa-medal" style="font-size: 1.5rem; color: #C0C0C0;"></i>
+                                                        {% elif loop.index == 3 %}
+                                                            <i class="fas fa-medal" style="font-size: 1.5rem; color: #CD7F32;"></i>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span class="badge bg-light text-dark fs-6">{{ loop.index }}</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="fas fa-user-circle text-primary me-2" style="font-size: 1.8rem;"></i>
+                                                        <div>
+                                                            <strong class="fs-6">{{ player.nickname }}</strong>
+                                                            {% if player.id == current_user.id %}
+                                                                <span class="badge bg-info ms-2">Tu</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center">
+                                                    <span class="badge {% if player.total_score >= 100 %}bg-success{% elif player.total_score >= 50 %}bg-warning{% else %}bg-secondary{% endif %} fs-6 px-3 py-2">
+                                                        <i class="fas fa-star me-1"></i>{{ player.total_score }} punti
+                                                    </span>
+                                                </td>
+                                                <td class="text-center">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-calendar-alt me-1"></i>{{ player.created_at.strftime('%d/%m/%Y') }}
+                                                    </small>
+                                                </td>
+                                                <td class="text-center">
+                                                    <small class="text-muted">
+                                                        {% if player.last_activity %}
+                                                            <i class="fas fa-clock me-1"></i>{{ player.last_activity.strftime('%d/%m/%Y %H:%M') }}
+                                                        {% else %}
+                                                            <span class="text-muted">N/A</span>
+                                                        {% endif %}
+                                                    </small>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-5">
+                                    <i class="fas fa-users text-muted mb-3" style="font-size: 4rem;"></i>
+                                    <h4 class="mt-3 text-muted">Nessun giocatore registrato</h4>
+                                    <p class="text-muted">Sarai il primo a comparire in classifica!</p>
+                                    <a href="/quiz" class="btn btn-primary btn-lg shadow">
+                                        <i class="fas fa-play me-2"></i>Inizia a Giocare
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card modern-card border-0 shadow-lg">
+                        <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+                            <h4 class="mb-0"><i class="fas fa-bolt me-2"></i>Azioni Rapide</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <a href="/quiz" class="btn btn-success btn-lg w-100 shadow">
+                                        <i class="fas fa-question-circle me-2"></i>Fai un Quiz
+                                    </a>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <a href="/profile" class="btn btn-primary btn-lg w-100 shadow">
+                                        <i class="fas fa-user me-2"></i>Il Tuo Profilo
+                                    </a>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <a href="/homepage" class="btn btn-info btn-lg w-100 shadow">
+                                        <i class="fas fa-home me-2"></i>Homepage
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-4 mt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-2"></i>Sviluppato da Christian Cani
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <span class="me-3">Powered by</span>
+                        <i class="fab fa-python text-warning" style="font-size: 1.5rem;"></i>
+                        <span class="mx-2 text-warning">+</span>
+                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body.scoreboard-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            border-radius: 0 0 30px 30px;
+            margin-top: -20px;
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+        }
+
+        .modern-card {
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+            padding: 8px 12px;
+        }
+
+        .hover-effect:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .hover-effect.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: 600;
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .shadow {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .table {
+            border-radius: 0 0 20px 20px;
+        }
+
+        .table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.05);
+            transform: scale(1.01);
+        }
+
+        .current-user-row {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            font-weight: 600;
+        }
+
+        .current-user-row:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        }
+
+        .navbar-text {
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .trophy-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fa-users, .fa-star, .fa-medal {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes shine {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        .fa-trophy {
+            animation: shine 2s infinite;
+        }
+    </style>
+    <script>
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                mainContent.style.marginLeft = '0';
+            } else {
+                sidebar.style.left = '0px';
+                mainContent.style.marginLeft = '250px';
+            }
+        });
+    </script>
+</body>
+</html>

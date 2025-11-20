@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrati - Kodland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="auth-page">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="p-3">
+            <h4><i class="fas fa-code me-2"></i>Kodland</h4>
+            <hr class="border-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/"><i class="fas fa-home me-2"></i>Start</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/homepage"><i class="fas fa-tachometer-alt me-2"></i>Homepage</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/profile"><i class="fas fa-user me-2"></i>Profilo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/scoreboard"><i class="fas fa-trophy me-2"></i>Classifica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Accedi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/registration"><i class="fas fa-user-plus me-2"></i>Registrati</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" style="margin-left: 0; transition: margin-left 0.3s;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light me-3" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand fw-bold" href="/"><i class="fas fa-code me-2"></i>Kodland</a>
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card modern-card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-user-plus text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h1 class="card-title fw-bold text-primary">Registrati</h1>
+                                <p class="text-muted">Crea il tuo account per iniziare</p>
+                            </div>
+                            {% with messages = get_flashed_messages(with_categories=true) %}
+                                {% if messages %}
+                                    {% for category, message in messages %}
+                                        <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                                            <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
+                                            {{ message }}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endwith %}
+                            <form method="POST" action="{{ url_for('registration') }}" class="auth-form">
+                                <div class="mb-3 position-relative">
+                                    <label for="nickname" class="form-label">
+                                        <i class="fas fa-user-tag me-1"></i>Nickname
+                                    </label>
+                                    <input type="text" class="form-control modern-input" name="nickname" id="nickname" required autocomplete="off" placeholder="Scegli un nickname unico">
+                                    <div id="nicknameSuggestions" class="list-group position-absolute w-100" style="z-index: 1000; top: 100%; display: none;"></div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div id="nicknameWarning" class="alert alert-warning alert-dismissible fade show" style="display: none;" role="alert">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        <strong>Attenzione!</strong> Il nickname deve essere unico. Non puoi utilizzare un nickname già in uso da un altro utente.
+                                        <button type="button" class="btn-close" onclick="document.getElementById('nicknameWarning').style.display='none'"></button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">
+                                        <i class="fas fa-envelope me-1"></i>Email
+                                    </label>
+                                    <input type="email" class="form-control modern-input" name="email" id="email" required placeholder="la-tua-email@esempio.com">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>Password
+                                    </label>
+                                    <input type="password" class="form-control modern-input" name="password" id="password" required placeholder="Almeno 6 caratteri">
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="confirmPassword" class="form-label">
+                                        <i class="fas fa-lock me-1"></i>Conferma Password
+                                    </label>
+                                    <input type="password" class="form-control modern-input" name="confirmPassword" id="confirmPassword" required placeholder="Ripeti la password">
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success w-100 btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Registrati
+                                </button>
+                            </form>
+                            
+                            <div class="text-center mt-4">
+                                <p class="text-muted">Hai già un account? 
+                                    <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Accedi qui
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-4 mt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-2"></i>Sviluppato da Christian Cani
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <span class="me-3">Powered by</span>
+                        <i class="fab fa-python text-warning" style="font-size: 1.5rem;"></i>
+                        <span class="mx-2 text-warning">+</span>
+                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body.auth-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .modern-card {
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+            padding: 8px 12px;
+        }
+
+        .hover-effect:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .modern-input {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .modern-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .fa-user-plus {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .auth-form {
+            margin-top: 20px;
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            margin-bottom: 2px;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+        }
+    </style>
+    <script>
+        const nicknameInput = document.getElementById('nickname');
+        const nicknameSuggestions = document.getElementById('nicknameSuggestions');
+        const nicknameWarning = document.getElementById('nicknameWarning');
+        let selectedIndex = -1;
+
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                mainContent.style.marginLeft = '0';
+            } else {
+                sidebar.style.left = '0px';
+                mainContent.style.marginLeft = '250px';
+            }
+        });
+
+        // Show warning when clicking on nickname field
+        nicknameInput.addEventListener('focus', function() {
+            nicknameWarning.style.display = 'block';
+        });
+
+        // Hide warning after 5 seconds
+        setTimeout(() => {
+            if (nicknameWarning.style.display === 'block') {
+                nicknameWarning.style.display = 'none';
+            }
+        }, 5000);
+
+        // Nickname autocomplete functionality
+        nicknameInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            if (query.length < 2) {
+                nicknameSuggestions.style.display = 'none';
+                return;
+            }
+
+            fetch(`/nickname-suggestions?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        nicknameSuggestions.innerHTML = '';
+                        data.forEach((nickname, index) => {
+                            const item = document.createElement('a');
+                            item.href = '#';
+                            item.className = 'list-group-item list-group-item-action';
+                            item.textContent = nickname;
+                            item.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                nicknameInput.value = nickname;
+                                nicknameSuggestions.style.display = 'none';
+                            });
+                            nicknameSuggestions.appendChild(item);
+                        });
+                        nicknameSuggestions.style.display = 'block';
+                    } else {
+                        nicknameSuggestions.style.display = 'none';
+                    }
+                })
+                .catch(() => {
+                    nicknameSuggestions.style.display = 'none';
+                });
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!nicknameInput.contains(e.target) && !nicknameSuggestions.contains(e.target)) {
+                nicknameSuggestions.style.display = 'none';
+            }
+        });
+
+        // Keyboard navigation for suggestions
+        nicknameInput.addEventListener('keydown', function(e) {
+            const items = nicknameSuggestions.querySelectorAll('.list-group-item');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+                updateSelection(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = selectedIndex <= 0 ? items.length - 1 : selectedIndex - 1;
+                updateSelection(items);
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                items[selectedIndex].click();
+            } else if (e.key === 'Escape') {
+                nicknameSuggestions.style.display = 'none';
+                selectedIndex = -1;
+            }
+        });
+
+        function updateSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage - Kodland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="homepage-body">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="p-3">
+            <h4><i class="fas fa-code me-2"></i>Kodland</h4>
+            <hr class="border-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/"><i class="fas fa-home me-2"></i>Start</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/homepage"><i class="fas fa-tachometer-alt me-2"></i>Homepage</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/profile"><i class="fas fa-user me-2"></i>Profilo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/scoreboard"><i class="fas fa-trophy me-2"></i>Classifica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Accedi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/registration"><i class="fas fa-user-plus me-2"></i>Registrati</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" style="margin-left: 0; transition: margin-left 0.3s;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light me-3" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand fw-bold" href="/"><i class="fas fa-code me-2"></i>Kodland</a>
+                {% if current_user.is_authenticated %}
+                <span class="navbar-text text-white">
+                    <i class="fas fa-user-circle me-1"></i>{{ current_user.nickname }}
+                </span>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card modern-card border-0 shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-tachometer-alt text-primary mb-3" style="font-size: 3rem;"></i>
+                                <h1 class="card-title fw-bold text-primary">Homepage</h1>
+                                <p class="card-text text-muted">Benvenuto nella tua dashboard personale!</p>
+                            </div>
+
+                            {% if current_user.is_authenticated %}
+                            <!-- Weather Section - Only for logged in users -->
+                            <div class="weather-section">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-cloud-sun text-warning mb-2" style="font-size: 2.5rem;"></i>
+                                    <h3 class="text-primary">Previsioni Meteo</h3>
+                                </div>
+                                <form id="weatherForm" class="mb-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control modern-input" id="cityInput" placeholder="Inserisci il nome della città" autocomplete="off" required>
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-search"></i> Cerca
+                                        </button>
+                                    </div>
+                                    <div id="suggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
+                                </form>
+
+                                <div id="weatherResults" class="d-none">
+                                    <div class="card border-0 shadow-sm">
+                                        <div class="card-header bg-primary text-white">
+                                            <h4 id="cityName" class="mb-0"><i class="fas fa-map-marker-alt me-2"></i></h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover mb-0">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th><i class="fas fa-calendar me-1"></i>Data</th>
+                                                            <th><i class="fas fa-cloud me-1"></i>Meteo</th>
+                                                            <th><i class="fas fa-sun me-1"></i>Diurna</th>
+                                                            <th><i class="fas fa-moon me-1"></i>Notturna</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="weatherTableBody">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="loading" class="text-center d-none">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Caricamento...</span>
+                                    </div>
+                                </div>
+
+                                <div id="error" class="alert alert-danger d-none"></div>
+                            </div>
+                            {% else %}
+                            <!-- Login prompt for non-authenticated users -->
+                            <div class="text-center">
+                                <div class="alert alert-info border-0">
+                                    <i class="fas fa-lock text-warning mb-3" style="font-size: 2.5rem;"></i>
+                                    <h4 class="text-primary">🔒 Accedi per utilizzare il meteo</h4>
+                                    <p class="mb-4">Per accedere alle previsioni meteo e a tutte le funzionalità avanzate, effettua il login o registrati.</p>
+                                    <a href="/login" class="btn btn-primary me-2">
+                                        <i class="fas fa-sign-in-alt me-1"></i>Accedi
+                                    </a>
+                                    <a href="/registration" class="btn btn-outline-primary">
+                                        <i class="fas fa-user-plus me-1"></i>Registrati
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-4 mt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-2"></i>Sviluppato da Christian Cani
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <span class="me-3">Powered by</span>
+                        <i class="fab fa-python text-warning" style="font-size: 1.5rem;"></i>
+                        <span class="mx-2 text-warning">+</span>
+                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const cityInput = document.getElementById('cityInput');
+        const suggestionsDiv = document.getElementById('suggestions');
+        let selectedIndex = -1;
+
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                mainContent.style.marginLeft = '0';
+            } else {
+                sidebar.style.left = '0px';
+                mainContent.style.marginLeft = '250px';
+            }
+        });
+
+        // City autocomplete functionality
+        cityInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            if (query.length < 2) {
+                suggestionsDiv.style.display = 'none';
+                return;
+            }
+
+            fetch(`/city-suggestions?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        suggestionsDiv.innerHTML = '';
+                        data.forEach((city, index) => {
+                            const item = document.createElement('a');
+                            item.href = '#';
+                            item.className = 'list-group-item list-group-item-action';
+                            item.textContent = city.display;
+                            item.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                cityInput.value = city.name;
+                                suggestionsDiv.style.display = 'none';
+                            });
+                            suggestionsDiv.appendChild(item);
+                        });
+                        suggestionsDiv.style.display = 'block';
+                    } else {
+                        suggestionsDiv.style.display = 'none';
+                    }
+                })
+                .catch(() => {
+                    suggestionsDiv.style.display = 'none';
+                });
+        });
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!cityInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+                suggestionsDiv.style.display = 'none';
+            }
+        });
+
+        // Keyboard navigation for suggestions
+        cityInput.addEventListener('keydown', function(e) {
+            const items = suggestionsDiv.querySelectorAll('.list-group-item');
+            if (items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = (selectedIndex + 1) % items.length;
+                updateSelection(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = selectedIndex <= 0 ? items.length - 1 : selectedIndex - 1;
+                updateSelection(items);
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                items[selectedIndex].click();
+            } else if (e.key === 'Escape') {
+                suggestionsDiv.style.display = 'none';
+                selectedIndex = -1;
+            }
+        });
+
+        function updateSelection(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        document.getElementById('weatherForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const city = cityInput.value.trim();
+
+            if (!city) return;
+
+            // Hide suggestions
+            suggestionsDiv.style.display = 'none';
+
+            // Show loading
+            document.getElementById('loading').classList.remove('d-none');
+            document.getElementById('weatherResults').classList.add('d-none');
+            document.getElementById('error').classList.add('d-none');
+
+            try {
+                const response = await fetch(`/weather?city=${encodeURIComponent(city)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                displayWeather(data);
+            } catch (error) {
+                document.getElementById('error').textContent = error.message;
+                document.getElementById('error').classList.remove('d-none');
+            } finally {
+                document.getElementById('loading').classList.add('d-none');
+            }
+        });
+
+        function displayWeather(data) {
+            document.getElementById('cityName').textContent = `Previsioni per ${data.city}`;
+            const tbody = document.getElementById('weatherTableBody');
+            tbody.innerHTML = '';
+
+            data.forecast.forEach(day => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${day.date}</td>
+                    <td>${day.weather}</td>
+                    <td>${day.day_temp}°C</td>
+                    <td>${day.night_temp}°C</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('weatherResults').classList.remove('d-none');
+        }
+    </script>
+    <style>
+        body.homepage-body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .modern-card {
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+            padding: 8px 12px;
+        }
+
+        .hover-effect:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .modern-input {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .modern-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(102, 126, 234, 0.1);
+        }
+
+        .weather-section {
+            border-top: 2px solid #f8f9fa;
+            padding-top: 30px;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .navbar-text {
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .fa-tachometer-alt {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fa-cloud-sun {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</body>
+</html>

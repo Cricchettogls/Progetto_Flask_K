@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Kodland</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="quiz-page">
+    <!-- Sidebar -->
+    <nav id="sidebar" class="text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="p-3">
+            <h4><i class="fas fa-code me-2"></i>Kodland</h4>
+            <hr class="border-light">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/"><i class="fas fa-home me-2"></i>Start</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/homepage"><i class="fas fa-tachometer-alt me-2"></i>Homepage</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/profile"><i class="fas fa-user me-2"></i>Profilo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/scoreboard"><i class="fas fa-trophy me-2"></i>Classifica</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Accedi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/registration"><i class="fas fa-user-plus me-2"></i>Registrati</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <div class="main-content" style="margin-left: 0; transition: margin-left 0.3s;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="container-fluid">
+                <button class="btn btn-outline-light me-3" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <a class="navbar-brand fw-bold" href="/"><i class="fas fa-code me-2"></i>Kodland</a>
+                {% if current_user.is_authenticated %}
+                <span class="navbar-text text-white">
+                    <i class="fas fa-user-circle me-1"></i>{{ current_user.nickname }}
+                </span>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container mt-5">
+            <!-- Start Screen -->
+            <div id="startScreen" class="text-center">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card modern-card border-0 shadow-lg">
+                            <div class="card-body p-5">
+                                <div class="mb-4">
+                                    <i class="fas fa-brain text-primary mb-3" style="font-size: 4rem;"></i>
+                                </div>
+                                <h1 class="card-title fw-bold text-primary">🤖 Quiz AI e Python</h1>
+                                <p class="card-text text-muted">Testa le tue conoscenze su Sviluppo di Intelligenza Artificiale in Python!</p>
+                                <div class="alert alert-info border-0 mt-4">
+                                    <h5 class="text-primary"><i class="fas fa-info-circle me-2"></i>Come funziona:</h5>
+                                    <ul class="text-start mt-3">
+                                        <li><i class="fas fa-check text-success me-2"></i>30 domande casuali su AI e Python Development</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Ogni risposta corretta vale 2 punti</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Puoi cambiare risposta prima di procedere</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>I tuoi punti vengono sommati al totale del profilo</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Puoi fermarti in qualsiasi momento</li>
+                                        <li><i class="fas fa-check text-success me-2"></i>Alla fine puoi rivedere tutte le risposte</li>
+                                    </ul>
+                                </div>
+                                <button id="startQuizBtn" class="btn btn-success btn-lg shadow">
+                                    <i class="fas fa-rocket me-2"></i>Inizia Quiz
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div id="quizScreen" style="display: none;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <!-- Quiz Header -->
+                        <div class="card modern-card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4><i class="fas fa-question-circle text-primary me-2"></i>Domanda <span id="currentQuestionNum">1</span> di <span id="totalQuestions">30</span></h4>
+                                </div>
+                                <div class="progress mt-3">
+                                    <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width: 3.33%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Question Card -->
+                        <div class="card modern-card border-0 shadow-lg">
+                            <div class="card-body p-4">
+                                <h5 id="questionText" class="card-title fw-bold text-primary mb-4">Caricamento domanda...</h5>
+                                <div id="optionsContainer" class="d-grid gap-3">
+                                    <!-- Options will be inserted here -->
+                                </div>
+                                <div class="text-center mt-4">
+                                    <button id="nextQuestionBtn" class="btn btn-primary me-2" disabled>
+                                        <i class="fas fa-arrow-right me-2"></i>Domanda Successiva
+                                    </button>
+                                    <button id="finishQuizBtn" class="btn btn-danger">
+                                        <i class="fas fa-stop me-2"></i>Termina Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completion Screen -->
+            <div id="completionScreen" style="display: none;">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card modern-card border-0 shadow-lg">
+                            <div class="card-body text-center p-5">
+                                <div class="mb-4">
+                                    <h1 class="display-4">🎉</h1>
+                                    <h2 class="text-primary fw-bold">Grazie per aver partecipato!</h2>
+                                </div>
+                                <div class="alert alert-success border-0 shadow-sm">
+                                    <h4 class="fw-bold">Hai totalizzato: <span id="finalScore">0</span> punti!</h4>
+                                    <p class="mb-0">I tuoi punti sono stati aggiunti al tuo profilo.</p>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="d-grid gap-3">
+                                        <button id="reviewAnswersBtn" class="btn btn-info btn-lg shadow">
+                                            <i class="fas fa-search me-2"></i>Rivedi le Risposte
+                                        </button>
+                                        <button id="playAgainBtn" class="btn btn-success btn-lg shadow">
+                                            <i class="fas fa-redo me-2"></i>Gioca Ancora
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Review Screen -->
+            <div id="reviewScreen" style="display: none;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card modern-card border-0 shadow-lg">
+                            <div class="card-header text-white d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+                                <h4 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Revisione delle Risposte</h4>
+                                <button id="backToCompletionBtn" class="btn btn-light btn-sm">
+                                    <i class="fas fa-arrow-left me-1"></i>Indietro
+                                </button>
+                            </div>
+                            <div class="card-body p-4">
+                                <div id="reviewContent">
+                                    <!-- Review content will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card modern-card border-0 shadow-lg">
+                            <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+                                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistiche</h5>
+                            </div>
+                            <div class="card-body p-4">
+                                <div class="text-center mb-4">
+                                    <div class="display-6 text-success fw-bold"><span id="correctCount">0</span></div>
+                                    <small class="text-muted">Risposte Corrette</small>
+                                </div>
+                                <div class="text-center mb-4">
+                                    <div class="display-6 text-danger fw-bold"><span id="incorrectCount">0</span></div>
+                                    <small class="text-muted">Risposte Sbagliate</small>
+                                </div>
+                                <div class="text-center mb-4">
+                                    <div class="display-6 text-primary fw-bold"><span id="reviewScore">0</span></div>
+                                    <small class="text-muted">Punteggio Totale</small>
+                                </div>
+                                <hr>
+                                <div class="d-grid gap-2">
+                                    <button id="reviewPlayAgainBtn" class="btn btn-success shadow">
+                                        <i class="fas fa-redo me-2"></i>Nuovo Quiz
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-white py-4 mt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="fas fa-code me-2"></i>Sviluppato da Christian Cani
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <span class="me-3">Powered by</span>
+                        <i class="fab fa-python text-warning" style="font-size: 1.5rem;"></i>
+                        <span class="mx-2 text-warning">+</span>
+                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quiz State
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let totalQuestions = 30;
+        let userAnswers = []; // Store all user answers
+
+        // DOM Elements
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const completionScreen = document.getElementById('completionScreen');
+        const reviewScreen = document.getElementById('reviewScreen');
+        const startQuizBtn = document.getElementById('startQuizBtn');
+        const currentQuestionNum = document.getElementById('currentQuestionNum');
+        const totalQuestionsEl = document.getElementById('totalQuestions');
+        const currentScore = document.getElementById('currentScore');
+        const progressBar = document.getElementById('progressBar');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const finishQuizBtn = document.getElementById('finishQuizBtn');
+        const finalScore = document.getElementById('finalScore');
+        const reviewAnswersBtn = document.getElementById('reviewAnswersBtn');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const reviewContent = document.getElementById('reviewContent');
+        const correctCount = document.getElementById('correctCount');
+        const incorrectCount = document.getElementById('incorrectCount');
+        const reviewScore = document.getElementById('reviewScore');
+        const backToCompletionBtn = document.getElementById('backToCompletionBtn');
+        const reviewPlayAgainBtn = document.getElementById('reviewPlayAgainBtn');
+
+        // Sidebar toggle functionality
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.querySelector('.main-content');
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-250px';
+                mainContent.style.marginLeft = '0';
+            } else {
+                sidebar.style.left = '0px';
+                mainContent.style.marginLeft = '250px';
+            }
+        });
+
+        // Start Quiz
+        startQuizBtn.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/api/quiz/questions');
+                questions = await response.json();
+                totalQuestions = questions.length;
+                totalQuestionsEl.textContent = totalQuestions;
+                
+                startScreen.style.display = 'none';
+                quizScreen.style.display = 'block';
+                currentQuestionIndex = 0;
+                score = 0;
+                userAnswers = [];
+                
+                loadQuestion();
+            } catch (error) {
+                alert('Errore nel caricamento delle domande. Riprova.');
+            }
+        });
+
+        // Load Question
+        function loadQuestion() {
+            if (currentQuestionIndex >= totalQuestions) {
+                completeQuiz();
+                return;
+            }
+
+            const question = questions[currentQuestionIndex];
+            currentQuestionNum.textContent = currentQuestionIndex + 1;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
+            progressBar.style.width = progress + '%';
+            
+            questionText.textContent = question.question;
+            
+            // Clear previous options
+            optionsContainer.innerHTML = '';
+            nextQuestionBtn.disabled = false;
+            
+            // Check if user already answered this question
+            const userAnswer = userAnswers[currentQuestionIndex];
+            
+            // Create options
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-outline-primary btn-lg text-start';
+                button.textContent = option;
+                button.addEventListener('click', () => selectAnswer(index, question.correct));
+                
+                // Pre-select if user already answered
+                if (userAnswer === index) {
+                    button.classList.remove('btn-outline-primary');
+                    button.classList.add('btn-primary', 'text-white');
+                }
+                
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Select Answer (allow changing)
+        function selectAnswer(selectedIndex, correctIndex) {
+            const buttons = optionsContainer.querySelectorAll('button');
+            
+            // Remove previous selection
+            buttons.forEach(btn => {
+                btn.classList.remove('btn-primary', 'text-white');
+                btn.classList.add('btn-outline-primary');
+            });
+            
+            // Highlight selected answer
+            buttons[selectedIndex].classList.remove('btn-outline-primary');
+            buttons[selectedIndex].classList.add('btn-primary', 'text-white');
+            
+            // Store user answer
+            userAnswers[currentQuestionIndex] = selectedIndex;
+        }
+
+        // Next Question
+        nextQuestionBtn.addEventListener('click', function() {
+            currentQuestionIndex++;
+            loadQuestion();
+        });
+
+        // Finish Quiz
+        finishQuizBtn.addEventListener('click', function() {
+            if (confirm('Sei sicuro di voler terminare il quiz?')) {
+                completeQuiz();
+            }
+        });
+
+        // Complete Quiz
+        async function completeQuiz() {
+            // Calculate final score
+            score = 0;
+            for (let i = 0; i < userAnswers.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score += 2;
+                }
+            }
+
+            try {
+                // Submit score to backend
+                const response = await fetch('/api/quiz/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        answers: userAnswers,
+                        score: score
+                    })
+                });
+                
+                const result = await response.json();
+                
+                quizScreen.style.display = 'none';
+                completionScreen.style.display = 'block';
+                finalScore.textContent = score;
+                
+            } catch (error) {
+                alert('Errore nel salvataggio del punteggio.');
+                quizScreen.style.display = 'none';
+                completionScreen.style.display = 'block';
+                finalScore.textContent = score;
+            }
+        }
+
+        // Play Again
+        playAgainBtn.addEventListener('click', function() {
+            completionScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+        });
+
+        // Review Answers
+        reviewAnswersBtn.addEventListener('click', function() {
+            completionScreen.style.display = 'none';
+            reviewScreen.style.display = 'block';
+            generateReview();
+        });
+
+        // Generate Review
+        function generateReview() {
+            let correct = 0;
+            let totalScore = 0;
+            let reviewHTML = '';
+
+            for (let i = 0; i < userAnswers.length; i++) {
+                const question = questions[i];
+                const userAnswer = userAnswers[i];
+                const correctAnswer = question.correct;
+                const isCorrect = userAnswer === correctAnswer;
+
+                if (isCorrect) {
+                    correct++;
+                    totalScore += 2;
+                }
+
+                reviewHTML += `
+                    <div class="card mb-3 ${isCorrect ? 'border-success' : 'border-danger'}">
+                        <div class="card-header d-flex justify-content-between align-items-center ${isCorrect ? 'bg-success text-white' : 'bg-danger text-white'}">
+                            <strong>Domanda ${i + 1}</strong>
+                            <span>${isCorrect ? '✅' : '❌'}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Domanda:</strong> ${question.question}</p>
+                            <p><strong>La tua risposta:</strong> 
+                                <span class="${isCorrect ? 'text-success' : 'text-danger'}">${question.options[userAnswer]}</span>
+                            </p>
+                            <p><strong>Risposta corretta:</strong> 
+                                <span class="text-success">${question.options[correctAnswer]}</span>
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            reviewContent.innerHTML = reviewHTML;
+            correctCount.textContent = correct;
+            incorrectCount.textContent = userAnswers.length - correct;
+            reviewScore.textContent = totalScore;
+        }
+
+        // Back to Completion
+        backToCompletionBtn.addEventListener('click', function() {
+            reviewScreen.style.display = 'none';
+            completionScreen.style.display = 'block';
+        });
+
+        // Review Play Again
+        reviewPlayAgainBtn.addEventListener('click', function() {
+            reviewScreen.style.display = 'none';
+            startScreen.style.display = 'block';
+        });
+    </script>
+    <style>
+        body.quiz-page {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .modern-card {
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-effect {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 2px 0;
+            padding: 8px 12px;
+        }
+
+        .hover-effect:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .navbar-text {
+            font-weight: 600;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            border-radius: 4px;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .fa-brain {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .list-group-item {
+            border-radius: 8px;
+            margin-bottom: 2px;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+    </style>
+</body>
+</html>

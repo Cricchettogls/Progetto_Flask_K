@@ -1,0 +1,10 @@
+# Ambiente virtuale Python
+venv/
+__pycache__/
+
+# File di database locali (es. SQLite)
+*.db
+instance/
+
+# Chiavi di sicurezza e variabili d'ambiente
+.env
