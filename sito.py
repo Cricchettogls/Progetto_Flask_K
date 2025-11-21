@@ -8,17 +8,17 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-# Configuration
+# Configurazione
 app.config['SECRET_KEY'] = 'your-secret-key-here-change-in-production'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///kodland_users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize extensions
+# Inizializza le estensioni
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# User Model
+# Modello Utente
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nickname = db.Column(db.String(100), unique=True, nullable=False)
@@ -28,33 +28,33 @@ class User(UserMixin, db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def set_password(self, password):
-        # Use pbkdf2:sha256 method for better compatibility
+        # Usa il metodo pbkdf2:sha256 per una migliore compatibilità
         self.password_hash = generate_password_hash(password, method='pbkdf2:sha256')
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-# User Activity Model
+# Modello Attività Utente
 class UserActivity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     activity_type = db.Column(db.String(50), nullable=False)  # 'weather', 'quiz', 'login'
     description = db.Column(db.String(200), nullable=False)
-    city = db.Column(db.String(100))  # For weather activities
+    city = db.Column(db.String(100))  # Per le attività meteo
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relationship
+    # Relazione
     user = db.relationship('User', backref=db.backref('activities', lazy=True))
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Initialize database
+# Inizializza database
 with app.app_context():
     db.create_all()
 
-# Helper function to add activity
+# Funzione helper per aggiungere attività
 def add_activity(user, activity_type, description, city=None):
     activity = UserActivity(
         user_id=user.id,
@@ -65,16 +65,16 @@ def add_activity(user, activity_type, description, city=None):
     db.session.add(activity)
     db.session.commit()
 
-# Quiz Questions Data - AI e Python Development
+# Dati Domande Quiz - Sviluppo AI e Python
 quiz_questions = [
-    # Python Fundamentals for AI
+    # Fondamenti Python per AI
     {"question": "Quale libreria Python è considerata il gold standard per il machine learning?", "options": ["NumPy", "scikit-learn", "Matplotlib", "Pandas"], "correct": 1},
     {"question": "Quale tipo di dati usa principalmente NumPy per le operazioni matematiche?", "options": ["Liste Python standard", "Array multidimensionali", "Dizionari", "Stringhe"], "correct": 1},
     {"question": "Quale libreria Python è più adatta per la manipolazione e analisi dei dati tabellari?", "options": ["SciPy", "Pandas", "Seaborn", "TensorFlow"], "correct": 1},
     {"question": "In Python, quale libreria è principalmente usata per le operazioni di algebra lineare e calcolo scientifico?", "options": ["Math", "NumPy", "Statistics", "Random"], "correct": 1},
     {"question": "Quale libreria Python è specializzata nella visualizzazione di dati?", "options": ["Scikit-learn", "Matplotlib", "Requests", "BeautifulSoup"], "correct": 1},
     
-    # Machine Learning Fundamentals
+    # Fondamenti Machine Learning
     {"question": "Che tipo di apprendimento usa dati etichettati per addestrare un modello?", "options": ["Apprendimento non supervisionato", "Apprendimento supervisionato", "Apprendimento per rinforzo", "Deep learning"], "correct": 1},
     {"question": "Quale algoritmo è comunemente usato per la classificazione binaria?", "options": ["K-Means", "Random Forest", "Linear Regression", "DBSCAN"], "correct": 1},
     {"question": "Nel machine learning, cosa significa 'overfitting'?", "options": ["Il modello è troppo semplice", "Il modello funziona bene su dati nuovi", "Il modello memorizza i dati di training", "Il modello è molto veloce"], "correct": 2},
@@ -88,7 +88,7 @@ quiz_questions = [
     {"question": "Quale tipo di rete neurale è particolarmente efficace per le immagini?", "options": ["RNN", "CNN", "LSTM", "Transformer"], "correct": 1},
     {"question": "Cosa significa 'backpropagation'?", "options": ["Propagazione avanti dei dati", "Calcolo del gradiente all'indietro", "Aggiornamento manuale dei pesi", "Divisione dei dati"], "correct": 1},
     
-    # Neural Networks
+    # Reti Neurali
     {"question": "In una rete neurale, cosa rappresentano i pesi?", "options": ["I parametri che determinano l'importanza delle connessioni", "I dati di input", "Le funzioni di attivazione", "Il numero di neuroni"], "correct": 0},
     {"question": "Qual è il principale vantaggio di usare più layer in una rete neurale?", "options": ["Maggiore velocità", "Riduzione dell'overfitting", "Maggiore flessibilità", "Memoria ridotta"], "correct": 2},
     {"question": "Cosa fa il layer di dropout in una rete neurale?", "options": ["Aggiunge più neuroni", "Spegne casualmente alcuni neuroni", "Aumenta il learning rate", "Cambia la funzione di attivazione"], "correct": 1},
@@ -100,26 +100,26 @@ quiz_questions = [
     {"question": "Quale tecnica è comunemente usata per ridurre la dimensionalità dei dati di immagini?", "options": ["PCA", "K-Means", "Random Forest", "Linear Regression"], "correct": 0},
     {"question": "Cosa fa la convoluzione in una CNN?", "options": ["Riduce le dimensioni", "Estrae caratteristiche locali", "Aumenta il contrasto", "Migliora la risoluzione"], "correct": 1},
     
-    # Natural Language Processing
+    # Elaborazione del Linguaggio Naturale
     {"question": "Quale libreria Python è più usata per il NLP?", "options": ["NumPy", "NLTK", "Matplotlib", "Requests"], "correct": 1},
     {"question": "Cosa significa 'tokenizzazione' in NLP?", "options": ["Traduzione automatica", "Divisione del testo in unità più piccole", "Classificazione di testi", "Analisi dei sentimenti"], "correct": 1},
     {"question": "Quale modello è considerato un breakthrough nel NLP?", "options": ["Word2Vec", "Transformer", "CNN", "K-Means"], "correct": 1},
     {"question": "Cosa fa la tecnica 'Bag of Words'?", "options": ["Ordina le parole alfabeticamente", "Rappresenta il testo come un insieme di parole", "Traduce il testo", "Migliora la grammatica"], "correct": 1},
     {"question": "Cos'è l'analisi del sentiment?", "options": ["Analisi grammaticale", "Determinazione delle emozioni nel testo", "Traduzione automatica", "Riconoscimento vocale"], "correct": 1},
     
-    # Data Science and Statistics
+    # Data Science e Statistica
     {"question": "Quale statistica misura la dispersione dei dati rispetto alla media?", "options": ["Media", "Mediana", "Deviazione standard", "Moda"], "correct": 2},
     {"question": "Cosa fa la regressione lineare?", "options": ["Trova una relazione lineare tra variabili", "Classifica i dati", "Riduce la dimensionalità", "Clusterizza i dati"], "correct": 0},
     {"question": "Nel contesto AI, cosa significa 'feature engineering'?", "options": ["Progettare nuovi algoritmi", "Selezionare e trasformare le caratteristiche", "Aumentare la velocità", "Migliorare la visualizzazione"], "correct": 1},
     {"question": "Quale tecnica è usata per validare un modello di ML?", "options": ["Training set", "Test set", "Cross-validation", "Bias-variance tradeoff"], "correct": 2},
     {"question": "Cosa rappresenta la 'curva ROC'?", "options": ["La curva di apprendimento", "Il trade-off tra sensitivity e specificity", "La distribuzione dei dati", "L'accuratezza del modello"], "correct": 1},
     
-    # Ethics and Best Practices
+    # Etica e Buone Pratiche
     {"question": "Nel contesto AI, cosa significa 'bias'?", "options": ["Errore sistematico nei dati o modelli", "Velocità di calcolo", "Complessità dell'algoritmo", "Dimensione del dataset"], "correct": 0},
     {"question": "Qual è un principio fondamentale dell'AI responsabile?", "options": ["Massimizzare l'accuratezza", "Trasparenza e fairness", "Velocità di esecuzione", "Semplicità del codice"], "correct": 1},
     {"question": "Cosa rende un dataset 'equilibrato' per la classificazione?", "options": ["Uguale rappresentanza delle classi", "Grandi dimensioni", "Alta qualità", "Bassa complessità"], "correct": 0},
     
-    # Advanced Topics
+    # Argomenti Avanzati
     {"question": "Cos'è il 'transfer learning'?", "options": ["Migliorare i pesi", "Riutilizzare modelli pre-addestrati", "Aumentare la velocità", "Ridurre l'overfitting"], "correct": 1},
     {"question": "Cosa fa l'algoritmo di gradient descent?", "options": ["Aggiorna i parametri per minimizzare l'errore", "Aumenta l'accuratezza", "Velocizza il training", "Riduce la complessità"], "correct": 0},
     {"question": "Quale tecnica è usata per ridurre l'overfitting?", "options": ["Aumentare i dati", "Regularizzazione", "Usare più features", "Aumentare la complessità"], "correct": 1},
@@ -127,7 +127,7 @@ quiz_questions = [
     {"question": "Nel reinforcement learning, cosa rappresenta la 'reward function'?", "options": ["La velocità di apprendimento", "Il feedback per le azioni", "La complessità dell'ambiente", "Il tipo di algoritmo"], "correct": 1}
 ]
 
-# Routes
+# Rotte
 @app.route('/')
 def starter():
     return render_template('starter.html')
@@ -269,38 +269,47 @@ def nickname_suggestions():
         return jsonify([])
     
     try:
-        # Get existing nicknames that contain the query
+        # Controlla nicknames esistenti che contengono la query
         existing_users = User.query.filter(User.nickname.ilike(f'%{query}%')).all()
         existing_nicknames = [user.nickname for user in existing_users]
         
-        # Generate some suggestions based on the query
+        # Genera suggerimenti basati sulla query
         suggestions = []
         base_name = query.lower()
         
-        # Add some common username patterns
-        prefixes = ['The', 'Super', 'Mega', 'Ultra', 'Mr', 'Ms', 'Dr', 'Master']
-        suffixes = ['Pro', 'Master', 'Pro', 'Kid', 'Guy', 'Girl', 'Boss', 'King', 'Queen']
+        # Prefissi italiani più naturali e comuni tra i giovani
+        prefixes = ['Il', 'La', 'Un', 'Una', 'Re', 'Duca', 'Principe', 'Cavaliere', 'Mago']
+        # Suffissi italiani/italian style più freschi
+        suffixes = ['ita', 'style', 'fan', 'lover', 'boy', 'girl', 'man', 'team', 'club', 'rules', '96', '97', '98', '00', '01', '2024']
         
-        # Generate suggestions
-        for i in range(10):  # Generate 10 suggestions
+        # Genera suggerimenti (massimo 10 tentativi)
+        for i in range(10):
             suggestion = query
             
             if i < 3:
-                # Add numbers
-                suggestion += str(i + 1)
+                # Aggiungi numeri (soprattutto anni di nascita popolari)
+                if i == 0:
+                    suggestion += '96'  # Generazione X/Y
+                elif i == 1:
+                    suggestion += '00'  # Inizio 2000s
+                else:
+                    suggestion += '24'  # Anno corrente
+            
             elif i < 6:
-                # Add prefixes
+                # Aggiungi prefissi italiani
                 prefix = prefixes[i % len(prefixes)]
                 suggestion = f"{prefix}{query.title()}"
+            
             elif i < 9:
-                # Add suffixes
+                # Aggiungi suffissi alla moda
                 suffix = suffixes[i % len(suffixes)]
                 suggestion = f"{query.title()}{suffix}"
+            
             else:
-                # Add underscore variations
+                # Varianti con underscore + numeri
                 suggestion = f"{query}_{i-8}"
             
-            # Only add if not already taken
+            # Aggiungi solo se non già occupato
             if suggestion not in existing_nicknames:
                 suggestions.append(suggestion)
                 
