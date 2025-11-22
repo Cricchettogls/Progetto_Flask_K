@@ -2,39 +2,43 @@
 
 {% block title %}Homepage - Kodland{% endblock %}
 
-{% block body_class %}homepage-body{% endblock %}
+{% block body_class %}homepage-matrix{% endblock %}
 
 {% block content %}
+<!-- Contenuto principale della homepage -->
 <div class="row justify-content-center">
     <div class="col-md-10">
-        <div class="card modern-card border-0 shadow-lg">
+        <div class="card matrix-card border-0 shadow-lg">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
-                    <i class="fas fa-tachometer-alt text-primary mb-3" style="font-size: 3rem;"></i>
-                    <h1 class="card-title fw-bold text-primary">Homepage</h1>
-                    <p class="card-text text-muted">Benvenuto nella tua dashboard personale!</p>
+                    <i class="fas fa-tachometer-alt mb-3" style="font-size: 3rem; color: #ffffff;"></i>
+                    <h1 class="card-title orbitron fw-bold matrix-glow-text">Homepage</h1>
+                    <p class="card-text" style="color: #ffffff; font-weight: 500;">Benvenuto nella tua dashboard personale!</p>
                 </div>
 
                 {% if current_user.is_authenticated %}
-                <!-- Weather Section - Only for logged in users -->
+                <!-- Sezione Meteo - Solo per utenti autenticati -->
                 <div class="weather-section">
                     <div class="text-center mb-4">
-                        <i class="fas fa-cloud-sun text-warning mb-2" style="font-size: 2.5rem;"></i>
-                        <h3 class="text-primary">Previsioni Meteo</h3>
+                        <i class="fas fa-cloud-sun mb-2" style="font-size: 2.5rem; color: #ffffff;"></i>
+                        <h3 class="matrix-glow-text orbitron">Previsioni Meteo</h3>
                     </div>
-                    <form id="weatherForm" class="mb-4">
-                        <div class="input-group">
-                            <input type="text" class="form-control modern-input" id="cityInput" placeholder="Inserisci il nome della città" autocomplete="off" required>
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-search"></i> Cerca
-                            </button>
-                        </div>
-                        <div id="suggestions" class="list-group position-absolute w-100" style="z-index: 1000; display: none;"></div>
-                    </form>
+                    <div class="position-relative mb-4">
+                        <form id="weatherForm">
+                            <div class="input-group">
+                                <input type="text" class="form-control input-matrix" id="cityInput" placeholder="Inserisci il nome della città" autocomplete="off" required>
+                                <button class="btn btn-matrix" type="submit">
+                                    <i class="fas fa-search"></i> Cerca
+                                </button>
+                            </div>
+                        </form>
+                        <div id="suggestions" class="list-group position-absolute w-100" style="z-index: 1050; display: none; max-height: 500px; overflow-y: auto; top: 100%; margin-top: 5px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);"></div>
+                    </div>
 
+                    <!-- Risultati Meteo -->
                     <div id="weatherResults" class="d-none">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-primary text-white">
+                        <div class="card matrix-card border-0 shadow-sm">
+                            <div class="card-header matrix-header text-white">
                                 <h4 id="cityName" class="mb-0"><i class="fas fa-map-marker-alt me-2"></i></h4>
                             </div>
                             <div class="card-body">
@@ -56,25 +60,27 @@
                         </div>
                     </div>
 
+                    <!-- Indicatore di caricamento -->
                     <div id="loading" class="text-center d-none">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Caricamento...</span>
                         </div>
                     </div>
 
+                    <!-- Messaggio di errore -->
                     <div id="error" class="alert alert-danger d-none"></div>
                 </div>
                 {% else %}
-                <!-- Login prompt for non-authenticated users -->
+                <!-- Messaggio di accesso per utenti non autenticati -->
                 <div class="text-center">
-                    <div class="alert alert-info border-0">
-                        <i class="fas fa-lock text-warning mb-3" style="font-size: 2.5rem;"></i>
-                        <h4 class="text-primary">🔒 Accedi per utilizzare il meteo</h4>
-                        <p class="mb-4">Per accedere alle previsioni meteo e a tutte le funzionalità avanzate, effettua il login o registrati.</p>
-                        <a href="/login" class="btn btn-primary me-2">
+                    <div class="alert matrix-card border-0">
+                        <i class="fas fa-lock mb-3" style="font-size: 2.5rem; color: #ffffff;"></i>
+                        <h4 class="matrix-glow-text orbitron">🔒 Accedi per utilizzare il meteo</h4>
+                        <p class="mb-4" style="color: #ffffff; font-weight: 500;">Per accedere alle previsioni meteo e a tutte le funzionalità avanzate, effettua il login o registrati.</p>
+                        <a href="/login" class="btn btn-matrix me-2">
                             <i class="fas fa-sign-in-alt me-1"></i>Accedi
                         </a>
-                        <a href="/registration" class="btn btn-outline-primary">
+                        <a href="/registration" class="btn btn-outline-matrix">
                             <i class="fas fa-user-plus me-1"></i>Registrati
                         </a>
                     </div>
@@ -88,11 +94,12 @@
 
 {% block scripts %}
 <script>
+    // Selettori DOM per l'autocomplete delle città
     const cityInput = document.getElementById('cityInput');
     const suggestionsDiv = document.getElementById('suggestions');
     let selectedIndex = -1;
 
-    // City autocomplete functionality
+    // Funzionalità autocomplete per le città
     cityInput.addEventListener('input', function() {
         const query = this.value.trim();
         if (query.length < 2) {
@@ -108,7 +115,7 @@
                     data.forEach((city, index) => {
                         const item = document.createElement('a');
                         item.href = '#';
-                        item.className = 'list-group-item list-group-item-action';
+                        item.className = 'list-group-item list-group-item-action matrix-item';
                         item.textContent = city.display;
                         item.addEventListener('click', function(e) {
                             e.preventDefault();
@@ -127,14 +134,14 @@
             });
     });
 
-    // Hide suggestions when clicking outside
+    // Nascondi i suggerimenti quando si clicca fuori
     document.addEventListener('click', function(e) {
         if (!cityInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
             suggestionsDiv.style.display = 'none';
         }
     });
 
-    // Keyboard navigation for suggestions
+    // Navigazione da tastiera per i suggerimenti
     cityInput.addEventListener('keydown', function(e) {
         const items = suggestionsDiv.querySelectorAll('.list-group-item');
         if (items.length === 0) return;
@@ -156,6 +163,7 @@
         }
     });
 
+    // Aggiorna la selezione visiva dei suggerimenti
     function updateSelection(items) {
         items.forEach((item, index) => {
             if (index === selectedIndex) {
@@ -166,16 +174,17 @@
         });
     }
 
+    // Gestione del form meteo
     document.getElementById('weatherForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const city = cityInput.value.trim();
 
         if (!city) return;
 
-        // Hide suggestions
+        // Nascondi i suggerimenti
         suggestionsDiv.style.display = 'none';
 
-        // Show loading
+        // Mostra il caricamento
         document.getElementById('loading').classList.remove('d-none');
         document.getElementById('weatherResults').classList.add('d-none');
         document.getElementById('error').classList.add('d-none');
@@ -197,6 +206,7 @@
         }
     });
 
+    // Funzione per visualizzare i dati meteo
     function displayWeather(data) {
         document.getElementById('cityName').textContent = `Previsioni per ${data.city}`;
         const tbody = document.getElementById('weatherTableBody');
@@ -220,39 +230,107 @@
 
 {% block styles %}
 <style>
-    body.homepage-body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* Stili specifici per la homepage */
+    body.homepage-matrix {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
     }
 
-    .modern-input {
-        border-radius: 10px;
-        border: 2px solid #e9ecef;
-        padding: 12px 15px;
-        transition: all 0.3s ease;
+    .matrix-header {
+        background: linear-gradient(135deg, #00ff00, #008800) !important;
+        border-radius: 15px 15px 0 0;
     }
 
-    .modern-input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    /* Effetti per le icone */
+    .matrix-icon {
+        animation: matrix-glow 2s ease-in-out infinite alternate;
     }
 
-    .table-hover tbody tr:hover {
-        background-color: rgba(102, 126, 234, 0.1);
+    /* Testo con effetto neón animato */
+    .matrix-glow-text {
+        color: #00cc00;
+        animation: matrix-glow 3s ease-in-out infinite alternate;
     }
 
+    /* Sezione meteo con bordo superiore */
     .weather-section {
-        border-top: 2px solid #f8f9fa;
+        border-top: 2px solid rgba(0, 255, 0, 0.3);
         padding-top: 30px;
     }
 
-    .fa-tachometer-alt {
-        animation: float 3s ease-in-out infinite;
+    /* Permette ai suggerimenti di uscire dal riquadro senza essere tagliati */
+    .matrix-card {
+        overflow: visible !important;
     }
 
-    .fa-cloud-sun {
-        animation: pulse 2s infinite;
+    /* Stili personalizzati per i suggerimenti */
+    .matrix-item {
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(0, 204, 0, 0.3);
+        color: #00cc00;
+        transition: all 0.3s ease;
+    }
+
+    .matrix-item:hover {
+        background: rgba(0, 204, 0, 0.1);
+        color: #00cc00;
+        border-color: #00cc00;
+    }
+
+    .matrix-item.active {
+        background: rgba(0, 204, 0, 0.2);
+        color: #00cc00;
+        border-color: #00cc00;
+    }
+    
+    /* Scrollbar personalizzata per suggerimenti */
+    #suggestions::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    #suggestions::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 4px;
+    }
+    
+    #suggestions::-webkit-scrollbar-thumb {
+        background: rgba(0, 204, 0, 0.5);
+        border-radius: 4px;
+        border: 1px solid #00cc00;
+    }
+    
+    #suggestions::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 204, 0, 0.7);
+    }
+
+    /* Stile del bordo per la tabella */
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 255, 0, 0.05);
+    }
+    
+    /* Miglioramento contrasto per testi */
+    .text-muted {
+        color: #b0b0b0 !important;
+    }
+    
+    .card-text.text-muted {
+        color: #b0b0b0 !important;
+    }
+
+    /* Stile alternativo per bottoni */
+    .btn-outline-matrix {
+        border: 1px solid #00ff00;
+        color: #00ff00;
+        background: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-matrix:hover {
+        background: #00ff00;
+        color: #000;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
     }
 </style>
 {% endblock %}

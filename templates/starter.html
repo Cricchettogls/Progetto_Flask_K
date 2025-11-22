@@ -1,74 +1,105 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Benvenuto nel Sito Kodland</title>
+    <!-- Font principali utilizzati nel sito -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="landing-page">
-    <!-- Sidebar -->
-    <nav id="sidebar" class="bg-gradient text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+<body class="landing-page-matrix">
+    <!-- Sidebar di navigazione laterale con gradiente grigio scuro -->
+    <nav id="sidebar" class="text-white vh-100 position-fixed" style="width: 250px; left: -250px; transition: left 0.3s; background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 50%, #2d2d2d 100%); box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);">
         <div class="p-3">
-            <h4><i class="fas fa-code me-2"></i>Kodland</h4>
-            <hr class="border-light">
+            <h4 style="font-family: 'Orbitron', monospace; font-weight: 900; color: #00ff00; text-shadow: 0 0 10px #00ff00;">
+                <i class="fas fa-code me-2"></i>KODLAND
+            </h4>
+            <hr style="border-color: #00ff00; box-shadow: 0 0 5px #00ff00;">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/"><i class="fas fa-home me-2"></i>Start</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/">
+                        <i class="fas fa-home me-2"></i>Start
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/homepage"><i class="fas fa-tachometer-alt me-2"></i>Homepage</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/homepage">
+                        <i class="fas fa-tachometer-alt me-2"></i>Homepage
+                    </a>
                 </li>
                 {% if current_user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/profile"><i class="fas fa-user me-2"></i>Profilo</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/profile">
+                        <i class="fas fa-user me-2"></i>Profilo
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/quiz">
+                        <i class="fas fa-brain me-2"></i>Quiz
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/scoreboard">
+                        <i class="fas fa-trophy me-2"></i>Classifica
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white hover-effect-matrix" href="/logout">
+                        <i class="fas fa-sign-out-alt me-2"></i>Esci
+                    </a>
                 </li>
                 {% else %}
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Accedi</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/login">
+                        <i class="fas fa-sign-in-alt me-2"></i>Accedi
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/registration"><i class="fas fa-user-plus me-2"></i>Registrati</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/registration">
+                        <i class="fas fa-user-plus me-2"></i>Registrati
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/quiz"><i class="fas fa-brain me-2"></i>Quiz</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/quiz">
+                        <i class="fas fa-brain me-2"></i>Quiz
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white hover-effect" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Esci</a>
+                    <a class="nav-link text-white hover-effect-matrix" href="/logout">
+                        <i class="fas fa-sign-out-alt me-2"></i>Esci
+                    </a>
                 </li>
                 {% endif %}
             </ul>
         </div>
     </nav>
 
-    <!-- Main content -->
+    <!-- Contenuto principale della pagina -->
     <div class="main-content" style="margin-left: 0; transition: margin-left 0.3s;">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <!-- Navbar principale con gradiente -->
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm" style="background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 50%, #2d2d2d 100%); box-shadow: 0 2px 10px rgba(0, 255, 0, 0.2);">
             <div class="container-fluid">
-                <button class="btn btn-outline-light me-3" id="sidebarToggle">
+                <button class="btn btn-outline-success me-3" id="sidebarToggle" style="border-color: #00ff00; color: #00ff00;">
                     <i class="fas fa-bars"></i>
                 </button>
-                <a class="navbar-brand fw-bold" href="/"><i class="fas fa-code me-2"></i>Kodland</a>
+                <a class="navbar-brand fw-bold" href="/" style="font-family: 'Orbitron', monospace; color: #00ff00; text-shadow: 0 0 10px #00ff00;">
+                    <i class="fas fa-code me-2"></i>KODLAND
+                </a>
+                {% if current_user.is_authenticated %}
+                <span class="navbar-text text-white" style="color: #00ff00 !important;">
+                    <i class="fas fa-user-circle me-1"></i>{{ current_user.nickname }}
+                </span>
+                {% endif %}
             </div>
         </nav>
 
-        <!-- Hero Section -->
-        <section class="hero-section text-white py-5">
+        <!-- Sezione hero principale -->
+        <section class="hero-section-matrix text-white py-5">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-8 text-center">
-                        <h1 class="display-4 fw-bold mb-3">
-                            <i class="fas fa-rocket me-3 text-warning"></i>Benvenuto nel Sito Kodland
+                        <h1 class="display-4 orbitron fw-bold mb-3" style="color: #ffffff; text-shadow: 0 0 10px rgba(255,255,255,0.5);">
+                            <i class="fas fa-terminal matrix-icon me-3" style="color: #00ff00;"></i>BENVENUTO NELLA MATRIX
                         </h1>
-                        <p class="lead mb-4">Il tuo viaggio nella programmazione e nell'intelligenza artificiale inizia qui!</p>
+                        <p class="lead mb-4 matrix-glow-text">Il tuo viaggio nel mondo dell'AI e della programmazione inizia qui, hacker!</p>
                     </div>
                 </div>
             </div>
@@ -77,20 +108,20 @@
         <div class="container my-5">
             <div class="row justify-content-center">
                 <div class="col-md-8">
-                    <div class="card modern-card border-0 shadow-lg">
+                    <div class="card matrix-card border-0 shadow-lg">
                         <div class="card-body text-center p-5">
                             {% if current_user.is_authenticated %}
-                                <div class="welcome-section">
+                                <div class="welcome-section-matrix">
                                     <div class="mb-4">
-                                        <i class="fas fa-user-circle text-primary" style="font-size: 4rem;"></i>
+                                        <i class="fas fa-user-circle matrix-icon" style="font-size: 4rem; color: #00ff00;"></i>
                                     </div>
-                                    <h3 class="text-success mb-3">👋 Bentornato, {{ current_user.nickname }}!</h3>
-                                    <p class="text-muted mb-4">Sei già connesso al tuo account. Puoi accedere a tutte le funzionalità del sito!</p>
+                                    <h3 class="matrix-glow-text orbitron mb-3">👋 Bentornato, {{ current_user.nickname }}!</h3>
+                                    <p class="mb-4" style="color: #e0e0e0;">Sei già connesso alla Matrix. Puoi accedere a tutte le funzionalità hacker!</p>
                                     <div class="d-flex gap-3 justify-content-center">
-                                        <a href="{{ url_for('profile') }}" class="btn btn-primary btn-lg">
-                                            <i class="fas fa-user me-2"></i>Vai al Profilo
+                                        <a href="{{ url_for('profile') }}" class="btn btn-matrix btn-lg">
+                                            <i class="fas fa-user me-2"></i>Profilo
                                         </a>
-                                        <a href="{{ url_for('quiz') }}" class="btn btn-success btn-lg">
+                                        <a href="{{ url_for('quiz') }}" class="btn btn-matrix btn-lg">
                                             <i class="fas fa-brain me-2"></i>Inizia Quiz
                                         </a>
                                         <a href="{{ url_for('logout') }}" class="btn btn-outline-danger">
@@ -99,27 +130,27 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div class="info-section mb-4">
-                                    <i class="fas fa-info-circle text-info mb-3" style="font-size: 3rem;"></i>
-                                    <h4 class="text-primary mb-3">📋 Informazioni Importanti</h4>
+                                <div class="info-section-matrix mb-4">
+                                    <i class="fas fa-info-circle matrix-icon mb-3" style="font-size: 3rem; color: #00ff00;"></i>
+                                    <h4 class="matrix-glow-text orbitron mb-3">📋 Accesso alla Matrix</h4>
                                     <div class="row">
                                         <div class="col-md-10 mx-auto">
-                                            <div class="alert alert-info border-0">
-                                                <p class="mb-2"><strong>Per accedere al Quiz e alle Previsioni Meteo è necessario:</strong></p>
+                                            <div class="alert matrix-card border-0">
+                                                <p class="mb-2" style="color: #00ff00;"><strong>Per accedere al Quiz AI e alle Previsioni Meteo è necessario:</strong></p>
                                                 <ul class="list-unstyled">
-                                                    <li><i class="fas fa-check text-success me-2"></i>Registrarsi con un nuovo account</li>
-                                                    <li><i class="fas fa-check text-success me-2"></i>Oppure accedere con un account esistente</li>
+                                                    <li style="color: #e0e0e0;"><i class="fas fa-check matrix-icon me-2" style="color: #00ff00;"></i>Registrarsi con un nuovo account hacker</li>
+                                                    <li style="color: #e0e0e0;"><i class="fas fa-check matrix-icon me-2" style="color: #00ff00;"></i>Oppure accedere con un account esistente</li>
                                                 </ul>
-                                                <p class="mb-0"><small>Il sistema ricorderà automaticamente i tuoi dati per futuri accessi.</small></p>
+                                                <p class="mb-0"><small style="color: #b0b0b0;">Il sistema ricorderà automaticamente i tuoi dati per futuri accessi.</small></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="action-buttons">
-                                    <a href="{{ url_for('registration') }}" class="btn btn-success btn-lg me-3 shadow">
+                                <div class="action-buttons-matrix">
+                                    <a href="{{ url_for('registration') }}" class="btn btn-matrix btn-lg me-3 shadow">
                                         <i class="fas fa-user-plus me-2"></i>Registrati
                                     </a>
-                                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg shadow">
+                                    <a href="{{ url_for('login') }}" class="btn btn-matrix btn-lg shadow">
                                         <i class="fas fa-sign-in-alt me-2"></i>Accedi
                                     </a>
                                 </div>
@@ -131,108 +162,218 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-white py-4 mt-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <!-- Footer principale del sito -->
+    <footer class="text-white py-4 mt-5" style="background: linear-gradient(180deg, #2d2d2d 0%, #1a1a1a 50%, #2d2d2d 100%); box-shadow: 0 -2px 10px rgba(0, 255, 0, 0.2);">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <p class="mb-0">
+                    <p class="mb-0" style="color: #00ff00; font-family: 'Orbitron', monospace;">
                         <i class="fas fa-code me-2"></i>Sviluppato da Christian Cani
                     </p>
                 </div>
                 <div class="col-md-6 text-end">
                     <div class="d-flex justify-content-end align-items-center">
-                        <span class="me-3">Powered by</span>
-                        <i class="fab fa-python text-warning" style="font-size: 1.5rem;"></i>
+                        <span class="me-3" style="color: #00ff00;">Powered by</span>
+                        <i class="fab fa-python text-warning" style="font-size: 1.5rem; filter: drop-shadow(0 0 3px #00ff00);"></i>
                         <span class="mx-2 text-warning">+</span>
-                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem;"></i>
+                        <i class="fab fa-js-square text-warning" style="font-size: 1.5rem; filter: drop-shadow(0 0 3px #00ff00);"></i>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Stili di base condivisi per il sito -->
     <style>
-        body.landing-page {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Font personalizzato per logo e titoli */
+        .orbitron {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+        }
+        
+        /* Font per il corpo del testo */
+        body.landing-page-matrix {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
             min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
-            border-radius: 0 0 30px 30px;
-            margin-top: -20px;
-            padding-top: 60px !important;
-            padding-bottom: 60px !important;
-        }
-
-        .modern-card {
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .modern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-
-        .hover-effect {
+        /* Effetto hover per i link di navigazione */
+        .hover-effect-matrix {
             transition: all 0.3s ease;
             border-radius: 8px;
             margin: 2px 0;
             padding: 8px 12px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .hover-effect:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
+        .hover-effect-matrix:hover {
+            background: rgba(0, 255, 0, 0.08);
+            color: #00cc00 !important;
+            transform: translateX(3px);
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.25);
+            text-shadow: 0 0 3px rgba(0, 204, 0, 0.7);
         }
 
-        .btn {
+        /* Sezione hero con effetto gradiente */
+        .hero-section-matrix {
+            background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 255, 0, 0.1) 100%);
+            border-radius: 0 0 30px 30px;
+            margin-top: -20px;
+            padding-top: 60px !important;
+            padding-bottom: 60px !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section-matrix::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+            animation: matrix-scan 3s infinite;
+        }
+
+        @keyframes matrix-scan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Effetto di scansione sui card */
+        .matrix-card {
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 0, 0.25);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .matrix-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .matrix-card:hover::before {
+            left: 100%;
+        }
+
+        .matrix-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 0, 0.15);
+            border-color: #00cc00;
+        }
+
+        /* Pulsante con effetto neón */
+        .btn-matrix {
             border-radius: 10px;
             font-weight: 600;
             transition: all 0.3s ease;
+            background: linear-gradient(135deg, #00ff00, #008800);
+            border: 1px solid #00ff00;
+            color: #000;
+            font-family: 'Orbitron', monospace;
         }
 
-        .btn:hover {
+        .btn-matrix:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 255, 0, 0.4);
+            background: linear-gradient(135deg, #00ff00, #00aa00);
+            border-color: #00ff00;
+            color: #000;
         }
 
-        .shadow {
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        /* Effetti per le icone */
+        .matrix-icon {
+            animation: matrix-glow 2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 3px rgba(0, 204, 0, 0.7));
+        }
+
+        /* Testo con effetto neón (glow più delicato) */
+        .matrix-glow-text {
+            color: #00cc00;
+            animation: matrix-glow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 2px rgba(0, 204, 0, 0.9);
+        }
+
+        /* Animazioni personalizzate (intensità glow ridotta) */
+        @keyframes matrix-glow {
+            0%, 100% {
+                text-shadow: 0 0 2px #00cc00, 0 0 4px #00cc00;
+            }
+            50% {
+                text-shadow: 0 0 1px #00cc00, 0 0 2px #00cc00;
+            }
         }
 
         .text-muted {
-            color: #6c757d !important;
+            color: #b0b0b0 !important;
+        }
+        
+        /* Miglioramento contrasto per testi e icone */
+        .nav-link.text-white {
+            color: #e0e0e0 !important;
+        }
+        
+        .nav-link.text-white i {
+            color: #00cc00;
+        }
+        
+        /* Riduzione luminosità verde globale */
+        .matrix-glow-text,
+        .matrix-icon {
+            color: #00cc00 !important;
+        }
+        
+        .btn-matrix {
+            background: linear-gradient(135deg, #00cc00, #008800) !important;
+            border-color: #00cc00 !important;
+        }
+        
+        .btn-matrix:hover {
+            background: linear-gradient(135deg, #00dd00, #009900) !important;
+            box-shadow: 0 6px 16px rgba(0, 204, 0, 0.3) !important;
+        }
+        
+        .btn-outline-danger {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+        
+        .btn-outline-danger:hover {
+            background: #ff6b6b;
+            color: #000;
         }
 
         .list-unstyled li {
             margin: 8px 0;
         }
 
-        /* Animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        .shadow {
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.2) !important;
         }
 
-        .fa-rocket {
-            animation: float 3s ease-in-out infinite;
-        }
-
+        /* Animazioni di accesso per icone */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
-        .welcome-section i {
+        .welcome-section-matrix i,
+        .info-section-matrix i {
             animation: pulse 2s infinite;
         }
     </style>

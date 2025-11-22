@@ -2,98 +2,98 @@
 
 {% block title %}Classifica - Kodland{% endblock %}
 
-{% block body_class %}scoreboard-page{% endblock %}
+{% block body_class %}scoreboard-matrix{% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section text-white py-5">
+<!-- Sezione hero introduttiva della classifica -->
+<section class="hero-section-matrix text-white py-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8 text-center">
-                <h1 class="display-4 fw-bold mb-3">
-                    <i class="fas fa-trophy me-3 text-warning trophy-icon"></i>Classifica Quiz
+                <h1 class="display-4 orbitron fw-bold mb-3">
+                    <i class="fas fa-trophy me-3" style="color: #ffd700;"></i>CLASSIFICA QUIZ
                 </h1>
-                <p class="lead mb-4">I migliori giocatori di Kodland</p>
+                <p class="lead mb-4 matrix-glow-text">I migliori hacker di Kodland</p>
             </div>
         </div>
     </div>
 </section>
 
 <div class="container my-5">
-    <!-- Statistics Cards -->
+    <!-- Sezione con statistiche riassuntive -->
     <div class="row mb-4">
         <div class="col-md-4 mb-3">
-            <div class="card modern-card border-0 shadow-lg text-center">
+            <div class="card matrix-card border-0 shadow-lg text-center">
                 <div class="card-body p-4">
-                    <i class="fas fa-users text-primary mb-3" style="font-size: 3rem;"></i>
-                    <h3 class="fw-bold text-primary">{{ players_count }}</h3>
-                    <p class="text-muted mb-0">Giocatori Totali</p>
+                    <i class="fas fa-users mb-3" style="font-size: 3rem; color: #ffffff;"></i>
+                    <h3 class="orbitron fw-bold matrix-glow-text">{{ players_count }}</h3>
+                    <p style="color: #ffffff; font-weight: 500;">Hacker Totali</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <div class="card modern-card border-0 shadow-lg text-center">
+            <div class="card matrix-card border-0 shadow-lg text-center">
                 <div class="card-body p-4">
-                    <i class="fas fa-star text-warning mb-3" style="font-size: 3rem;"></i>
-                    <h3 class="fw-bold text-warning">{{ max_score }}</h3>
-                    <p class="text-muted mb-0">Punteggio Massimo</p>
+                    <i class="fas fa-star mb-3" style="font-size: 3rem; color: #ffd700;"></i>
+                    <h3 class="orbitron fw-bold matrix-glow-text">{{ max_score }}</h3>
+                    <p style="color: #ffffff; font-weight: 500;">Punteggio Massimo</p>
                 </div>
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <div class="card modern-card border-0 shadow-lg text-center">
+            <div class="card matrix-card border-0 shadow-lg text-center">
                 <div class="card-body p-4">
-                    <i class="fas fa-medal text-success mb-3" style="font-size: 3rem;"></i>
-                    <h3 class="fw-bold text-success">{{ average_score }}</h3>
-                    <p class="text-muted mb-0">Punteggio Medio</p>
+                    <i class="fas fa-medal mb-3" style="font-size: 3rem; color: #ffffff;"></i>
+                    <h3 class="orbitron fw-bold matrix-glow-text">{{ average_score }}</h3>
+                    <p style="color: #ffffff; font-weight: 500;">Punteggio Medio</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scoreboard Table -->
+    <!-- Tabella della classifica -->
     <div class="row">
         <div class="col-12">
-            <div class="card modern-card border-0 shadow-lg">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+            <div class="card matrix-card border-0 shadow-lg">
+                <div class="card-header text-white matrix-header">
                     <h4 class="mb-0"><i class="fas fa-list-ol me-2"></i>Classifica Completa</h4>
                 </div>
                 <div class="card-body p-0">
                     {% if players %}
                         <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead style="background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);">
+                            <table class="table table-hover mb-0 matrix-table">
+                                <thead style="background: rgba(0, 0, 0, 0.6);">
                                     <tr>
-                                        <th scope="col" class="text-center fw-bold" style="width: 80px;">#</th>
-                                        <th scope="col" class="fw-bold">Giocatore</th>
-                                        <th scope="col" class="text-center fw-bold">Punteggio</th>
-                                        <th scope="col" class="text-center fw-bold">Registrato il</th>
-                                        <th scope="col" class="text-center fw-bold">Ultima Attività</th>
+                                        <th scope="col" class="text-center fw-bold" style="width: 80px; color: #ffffff;">#</th>
+                                        <th scope="col" class="fw-bold" style="color: #ffffff;">Hacker</th>
+                                        <th scope="col" class="text-center fw-bold" style="color: #ffffff;">Punteggio</th>
+                                        <th scope="col" class="text-center fw-bold" style="color: #ffffff;">Registrato il</th>
+                                        <th scope="col" class="text-center fw-bold" style="color: #ffffff;">Ultima Attività</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody style="background: rgba(0, 0, 0, 0.4);">
                                     {% for player in players %}
                                     <tr class="{% if player.id == current_user.id %}current-user-row{% endif %}">
                                         <td class="text-center">
                                             {% if loop.index <= 3 %}
                                                 {% if loop.index == 1 %}
-                                                    <i class="fas fa-trophy text-warning" style="font-size: 1.5rem;"></i>
+                                                    <i class="fas fa-crown" style="font-size: 1.5rem; color: #ffd700;"></i>
                                                 {% elif loop.index == 2 %}
-                                                    <i class="fas fa-medal" style="font-size: 1.5rem; color: #C0C0C0;"></i>
+                                                    <i class="fas fa-medal" style="font-size: 1.5rem; color: #c0c0c0;"></i>
                                                 {% elif loop.index == 3 %}
-                                                    <i class="fas fa-medal" style="font-size: 1.5rem; color: #CD7F32;"></i>
+                                                    <i class="fas fa-medal" style="font-size: 1.5rem; color: #cd7f32;"></i>
                                                 {% endif %}
                                             {% else %}
-                                                <span class="badge bg-light text-dark fs-6">{{ loop.index }}</span>
+                                                <span class="badge bg-dark text-light orbitron fs-6">{{ loop.index }}</span>
                                             {% endif %}
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <i class="fas fa-user-circle text-primary me-2" style="font-size: 1.8rem;"></i>
+                                                <i class="fas fa-user-circle me-2" style="font-size: 1.8rem; color: #ffffff;"></i>
                                                 <div>
-                                                    <strong class="fs-6">{{ player.nickname }}</strong>
+                                                    <strong class="fs-6 orbitron" style="color: #ffffff;">{{ player.nickname }}</strong>
                                                     {% if player.id == current_user.id %}
-                                                        <span class="badge bg-info ms-2">Tu</span>
+                                                        <span class="badge bg-success ms-2">TU</span>
                                                     {% endif %}
                                                 </div>
                                             </div>
@@ -104,16 +104,16 @@
                                             </span>
                                         </td>
                                         <td class="text-center">
-                                            <small class="text-muted">
-                                                <i class="fas fa-calendar-alt me-1"></i>{{ player.created_at.strftime('%d/%m/%Y') }}
+                                            <small style="color: #ffffff; font-weight: 500;">
+                                                <i class="fas fa-calendar-alt me-1" style="color: #ffffff;"></i>{{ player.created_at.strftime('%d/%m/%Y') }}
                                             </small>
                                         </td>
                                         <td class="text-center">
-                                            <small class="text-muted">
+                                            <small style="color: #ffffff; font-weight: 500;">
                                                 {% if player.last_activity %}
-                                                    <i class="fas fa-clock me-1"></i>{{ player.last_activity.strftime('%d/%m/%Y %H:%M') }}
+                                                    <i class="fas fa-clock me-1" style="color: #ffffff;"></i>{{ player.last_activity.strftime('%d/%m/%Y %H:%M') }}
                                                 {% else %}
-                                                    <span class="text-muted">N/A</span>
+                                                    <span style="color: #ffffff;">N/A</span>
                                                 {% endif %}
                                             </small>
                                         </td>
@@ -123,11 +123,12 @@
                             </table>
                         </div>
                     {% else %}
+                        <!-- Messaggio per nessun giocatore -->
                         <div class="text-center py-5">
-                            <i class="fas fa-users text-muted mb-3" style="font-size: 4rem;"></i>
-                            <h4 class="mt-3 text-muted">Nessun giocatore registrato</h4>
-                            <p class="text-muted">Sarai il primo a comparire in classifica!</p>
-                            <a href="/quiz" class="btn btn-primary btn-lg shadow">
+                            <i class="fas fa-users mb-3" style="font-size: 4rem; color: #ffffff;"></i>
+                            <h4 class="mt-3 matrix-glow-text">Nessun hacker registrato</h4>
+                            <p style="color: #ffffff; font-weight: 500;">Sarai il primo a comparire nella Matrix!</p>
+                            <a href="/quiz" class="btn btn-matrix btn-lg shadow">
                                 <i class="fas fa-play me-2"></i>Inizia a Giocare
                             </a>
                         </div>
@@ -137,27 +138,27 @@
         </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Sezione con azioni rapide -->
     <div class="row mt-4">
         <div class="col-12">
-            <div class="card modern-card border-0 shadow-lg">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+            <div class="card matrix-card border-0 shadow-lg">
+                <div class="card-header text-white matrix-header">
                     <h4 class="mb-0"><i class="fas fa-bolt me-2"></i>Azioni Rapide</h4>
                 </div>
                 <div class="card-body p-4">
                     <div class="row">
                         <div class="col-md-4 mb-3">
-                            <a href="/quiz" class="btn btn-success btn-lg w-100 shadow">
+                            <a href="/quiz" class="btn btn-matrix btn-lg w-100 shadow">
                                 <i class="fas fa-question-circle me-2"></i>Fai un Quiz
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="/profile" class="btn btn-primary btn-lg w-100 shadow">
+                            <a href="/profile" class="btn btn-matrix btn-lg w-100 shadow">
                                 <i class="fas fa-user me-2"></i>Il Tuo Profilo
                             </a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="/homepage" class="btn btn-info btn-lg w-100 shadow">
+                            <a href="/homepage" class="btn btn-matrix btn-lg w-100 shadow">
                                 <i class="fas fa-home me-2"></i>Homepage
                             </a>
                         </div>
@@ -171,71 +172,239 @@
 
 {% block styles %}
 <style>
-    body.scoreboard-page {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* Stili specifici per la pagina classifica */
+    body.scoreboard-matrix {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
     }
 
-    .hero-section {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+    /* Sezione hero con effetto gradiente */
+    .hero-section-matrix {
+        background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 50%, rgba(0, 255, 0, 0.1) 100%);
         border-radius: 0 0 30px 30px;
         margin-top: -20px;
         padding-top: 60px !important;
         padding-bottom: 60px !important;
+        position: relative;
+        overflow: hidden;
     }
 
-    .hover-effect.active {
-        background: rgba(255, 255, 255, 0.2);
-        font-weight: 600;
+    .hero-section-matrix::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.1), transparent);
+        animation: matrix-scan 3s infinite;
     }
 
-    .shadow {
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    @keyframes matrix-scan {
+        0% { left: -100%; }
+        100% { left: 100%; }
     }
 
-    .table {
+    .matrix-header {
+        background: linear-gradient(135deg, #00ff00, #008800) !important;
+        border-radius: 15px 15px 0 0;
+    }
+
+    /* Effetti grafici per le icone della classifica */
+    .matrix-icon {
+        animation: matrix-glow 2s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 5px #00ff00);
+    }
+
+    /* Testo con effetto neón animato */
+    .matrix-glow-text {
+        color: #00cc00;
+        animation: matrix-glow 3s ease-in-out infinite alternate;
+        text-shadow: 0 0 3px #00cc00;
+    }
+
+    /* Stili per la tabella della classifica */
+    .matrix-table {
         border-radius: 0 0 20px 20px;
+        background: rgba(0, 0, 0, 0.8);
+        /* Override Bootstrap per avere celle non bianche */
+        --bs-table-bg: transparent;
+        --bs-table-striped-bg: transparent;
+        --bs-table-hover-bg: rgba(0, 255, 0, 0.03);
+        color: #ffffff;
     }
 
-    .table tbody tr {
+    .matrix-table thead th,
+    .matrix-table tbody td {
+        color: #ffffff;
+    }
+ 
+    .matrix-table thead {
+        background: linear-gradient(135deg, rgba(0, 255, 0, 0.2) 0%, rgba(0, 0, 0, 0.8) 100%);
+    }
+ 
+    .matrix-table tbody tr {
         transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(0, 255, 0, 0.1);
     }
-
-    .table tbody tr:hover {
-        background-color: rgba(102, 126, 234, 0.05);
+ 
+    .matrix-table tbody tr:hover {
+        background: rgba(0, 255, 0, 0.05);
         transform: scale(1.01);
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
     }
 
+    /* Riga utente corrente */
     .current-user-row {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        background: linear-gradient(135deg, rgba(0, 255, 0, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
         font-weight: 600;
+        border-left: 3px solid #00ff00;
     }
 
     .current-user-row:hover {
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
+        background: linear-gradient(135deg, rgba(0, 255, 0, 0.15) 0%, rgba(0, 0, 0, 0.4) 100%);
+        border-left: 5px solid #00ff00;
     }
 
-    .navbar-text {
+    /* Stili per i badge dei punteggi */
+    .badge {
+        background: rgba(0, 0, 0, 0.8) !important;
+        border: 1px solid #00ff00;
+        color: #00ff00 !important;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .badge.bg-success {
+        background: linear-gradient(135deg, #00ff00, #008800) !important;
+        border-color: #00ff00 !important;
+        color: #000 !important;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+
+    .badge.bg-warning {
+        background: linear-gradient(135deg, #ffa500, #ff8c00) !important;
+        border-color: #ffa500 !important;
+        color: #000 !important;
+    }
+
+    .badge.bg-secondary {
+        background: rgba(128, 128, 128, 0.3) !important;
+        border-color: #808080 !important;
+        color: #ccc !important;
+    }
+
+    /* Effetti hover per i link attivi nella sidebar */
+    .hover-effect.active {
+        background: rgba(0, 255, 0, 0.2);
         font-weight: 600;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
     }
 
-    .trophy-icon {
-        animation: float 3s ease-in-out infinite;
+    /* Animazioni di scansione per i bottoni */
+    .btn-matrix {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #00ff00, #008800);
+        border: 1px solid #00ff00;
+        color: #000;
+        font-family: 'Orbitron', monospace;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
-    .fa-users, .fa-star, .fa-medal {
-        animation: pulse 2s infinite;
+    .btn-matrix::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
     }
 
-    .fa-trophy {
-        animation: shine 2s infinite;
+    .btn-matrix:hover::before {
+        left: 100%;
     }
 
-    @keyframes shine {
-        0% { opacity: 0.8; }
-        50% { opacity: 1; }
-        100% { opacity: 0.8; }
+    .btn-matrix:hover {
+        background: linear-gradient(135deg, #00ff00, #00aa00);
+        border-color: #00ff00;
+        color: #000;
+        box-shadow: 0 8px 25px rgba(0, 255, 0, 0.4);
+        transform: translateY(-2px);
+        text-shadow: none;
+    }
+
+    /* Stili per l'icona della corona */
+    .fa-crown {
+        animation: matrix-glow 1.5s ease-in-out infinite alternate, bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+    }
+
+    /* Effetti di typing per i numeri */
+    .orbitron {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+    }
+
+    /* Stili responsive per la pagina classifica */
+    @media (max-width: 768px) {
+        .hero-section-matrix {
+            margin-top: -10px;
+            padding-top: 40px !important;
+            padding-bottom: 40px !important;
+        }
+        
+        .matrix-card {
+            margin-bottom: 20px;
+        }
+    }
+
+    /* Effetti di particelle di background */
+    .matrix-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.1;
+    }
+    
+    /* Miglioramento contrasto per testi */
+    .text-muted {
+        color: #b0b0b0 !important;
+    }
+    
+    small.text-muted {
+        color: #b0b0b0 !important;
+    }
+
+    .particle {
+        position: absolute;
+        color: #00ff00;
+        font-size: 1px;
+        animation: float-matrix 10s infinite linear;
+    }
+
+    @keyframes float-matrix {
+        0% {
+            transform: translateY(100vh) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100px) rotate(360deg);
+            opacity: 0;
+        }
     }
 </style>
 {% endblock %}

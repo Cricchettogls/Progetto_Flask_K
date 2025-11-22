@@ -2,28 +2,29 @@
 
 {% block title %}Profilo - Kodland{% endblock %}
 
-{% block body_class %}profile-page{% endblock %}
+{% block body_class %}profile-matrix{% endblock %}
 
 {% block content %}
+<!-- Layout del profilo utente -->
 <div class="row">
-    <!-- User Profile Info -->
+    <!-- Informazioni profilo utente -->
     <div class="col-md-4">
-        <div class="card modern-card border-0 shadow-lg">
+        <div class="card matrix-card border-0 shadow-lg">
             <div class="card-body text-center p-4">
                 <div class="mb-4">
-                    <i class="fas fa-user-circle text-primary" style="font-size: 4rem;"></i>
+                    <i class="fas fa-user-circle matrix-icon" style="font-size: 4rem; color: #e0e0e0;"></i>
                 </div>
-                <h3 class="card-title fw-bold text-primary">{{ current_user.nickname }}</h3>
-                <p class="text-muted">{{ current_user.email }}</p>
-                <hr>
+                <h3 class="card-title orbitron fw-bold matrix-glow-text">{{ current_user.nickname }}</h3>
+                <p style="color: #d0d0d0;">{{ current_user.email }}</p>
+                <hr style="border-color: #00cc00; box-shadow: 0 0 3px #00cc00;">
                 <div class="text-center mb-4">
                     <h5 class="text-warning"><i class="fas fa-trophy me-2"></i>Punteggio Totale Quiz</h5>
-                    <div class="display-4 text-primary fw-bold">{{ current_user.total_score }}</div>
-                    <small class="text-muted">punti accumulati</small>
+                    <div class="display-4 matrix-glow-text orbitron fw-bold">{{ current_user.total_score }}</div>
+                    <small style="color: #d0d0d0;">punti accumulati</small>
                 </div>
-                <hr>
-                <p class="text-muted">
-                    <i class="fas fa-calendar me-2"></i>
+                <hr style="border-color: #00cc00; box-shadow: 0 0 3px #00cc00;">
+                <p style="color: #d0d0d0;">
+                    <i class="fas fa-calendar me-2" style="color: #e0e0e0;"></i>
                     <strong>Data di registrazione:</strong><br>
                     {{ current_user.created_at.strftime('%d/%m/%Y') }}
                 </p>
@@ -31,37 +32,37 @@
         </div>
     </div>
     
-    <!-- Recent Activities -->
+    <!-- Sezione attività recenti -->
     <div class="col-md-8">
-        <div class="card modern-card border-0 shadow-lg">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card matrix-card border-0 shadow-lg">
+            <div class="card-header matrix-header text-white d-flex justify-content-between align-items-center">
                 <h4 class="mb-0"><i class="fas fa-history me-2"></i>Attività Recenti</h4>
                 <small>Scorri per vedere tutte</small>
             </div>
             <div class="card-body p-0">
                 {% if activities %}
-                    <!-- Scrollable Activities Container -->
+                    <!-- Container scrollabile per le attività -->
                     <div class="activities-container" id="activitiesContainer">
                         <div class="list-group list-group-flush">
                             {% for activity in activities %}
-                            <div class="list-group-item activity-item">
+                            <div class="list-group-item activity-item-matrix">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         {% if activity.activity_type == 'weather' %}
-                                            <i class="fas fa-cloud-sun text-warning me-2"></i>
+                                            <i class="fas fa-cloud-sun me-2" style="color: #e0e0e0;"></i>
                                         {% elif activity.activity_type == 'quiz' %}
-                                            <i class="fas fa-question-circle text-info me-2"></i>
+                                            <i class="fas fa-question-circle me-2" style="color: #e0e0e0;"></i>
                                         {% elif activity.activity_type == 'quiz_completion' %}
-                                            <i class="fas fa-trophy text-warning me-2"></i>
+                                            <i class="fas fa-trophy me-2" style="color: #ffd700;"></i>
                                         {% elif activity.activity_type == 'login' %}
-                                            <i class="fas fa-sign-in-alt text-success me-2"></i>
+                                            <i class="fas fa-sign-in-alt me-2" style="color: #e0e0e0;"></i>
                                         {% endif %}
-                                        <strong>{{ activity.description }}</strong>
+                                        <strong style="color: #ffffff;">{{ activity.description }}</strong>
                                         {% if activity.city %}
-                                            <span class="badge bg-secondary ms-2">{{ activity.city }}</span>
+                                            <span class="badge bg-secondary ms-2" style="border: 1px solid #00cc00; color: #00cc00; background: rgba(0, 0, 0, 0.7) !important;">{{ activity.city }}</span>
                                         {% endif %}
                                     </div>
-                                    <small class="text-muted">
+                                    <small style="color: #d0d0d0;">
                                         {{ activity.rome_time.strftime('%d/%m/%Y %H:%M') }}
                                     </small>
                                 </div>
@@ -70,10 +71,11 @@
                         </div>
                     </div>
                 {% else %}
+                    <!-- Messaggio per nessuna attività -->
                     <div class="text-center py-5">
-                        <i class="fas fa-clock text-muted mb-3" style="font-size: 3rem;"></i>
-                        <p class="mt-3 text-muted">Nessuna attività registrata ancora.</p>
-                        <p class="text-muted">Inizia usando le funzionalità del sito per vedere qui le tue attività recenti!</p>
+                        <i class="fas fa-clock mb-3" style="font-size: 3rem; color: #e0e0e0;"></i>
+                        <p class="mt-3" style="color: #d0d0d0;">Nessuna attività registrata ancora.</p>
+                        <p style="color: #d0d0d0;">Inizia usando le funzionalità del sito per vedere qui le tue attività recenti!</p>
                     </div>
                 {% endif %}
             </div>
@@ -81,22 +83,22 @@
     </div>
 </div>
 
-<!-- Quick Actions -->
+<!-- Azioni rapide -->
 <div class="row mt-4">
     <div class="col-12">
-        <div class="card modern-card border-0 shadow-lg">
-            <div class="card-header bg-success text-white">
+        <div class="card matrix-card border-0 shadow-lg">
+            <div class="card-header matrix-header text-white">
                 <h4 class="mb-0"><i class="fas fa-bolt me-2"></i>Azioni Rapide</h4>
             </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="/homepage" class="btn btn-primary btn-lg w-100 mb-3">
+                        <a href="/homepage" class="btn btn-matrix btn-lg w-100 mb-3">
                             <i class="fas fa-home me-2"></i> Vai alla Homepage
                         </a>
                     </div>
                     <div class="col-md-6">
-                        <a href="/quiz" class="btn btn-success btn-lg w-100 mb-3">
+                        <a href="/quiz" class="btn btn-matrix btn-lg w-100 mb-3">
                             <i class="fas fa-question-circle me-2"></i> Fai un Quiz
                         </a>
                     </div>
@@ -109,19 +111,23 @@
 
 {% block scripts %}
 <script>
-    // Enable scrollbar only when there are 7 or more activities
+    // Gestione scrollbar per le attività quando sono numerose
     document.addEventListener('DOMContentLoaded', function() {
         const activitiesContainer = document.getElementById('activitiesContainer');
         if (!activitiesContainer) return;
         
-        const activityItems = document.querySelectorAll('.activity-item');
+        const activityItems = document.querySelectorAll('.activity-item-matrix');
         
+        // Abilita scrollbar quando ci sono 7 o più attività
         if (activityItems.length >= 7) {
-            // Apply scrollable styles for 7+ activities
             activitiesContainer.style.maxHeight = '400px';
             activitiesContainer.style.overflowY = 'auto';
+            
+            // Aggiungi stile scrollbar personalizzato
+            activitiesContainer.style.border = '1px solid rgba(0, 255, 0, 0.3)';
+            activitiesContainer.style.borderRadius = '10px';
         } else {
-            // Keep full height for fewer than 7 activities
+            // Mantieni altezza completa per poche attività
             activitiesContainer.style.maxHeight = 'none';
             activitiesContainer.style.overflowY = 'visible';
         }
@@ -131,45 +137,94 @@
 
 {% block styles %}
 <style>
-    body.profile-page {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* Stili specifici per la pagina profilo */
+    body.profile-matrix {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
     }
 
-    .card-header {
-        border-radius: 20px 20px 0 0 !important;
+    .matrix-header {
+        background: linear-gradient(135deg, #00ff00, #008800) !important;
+        border-radius: 15px 15px 0 0;
     }
 
-    .activity-item {
+    /* Effetti grafici per le icone del profilo */
+    .matrix-icon {
+        animation: matrix-glow 2s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 3px rgba(0, 204, 0, 0.7));
+    }
+
+    /* Testo con effetto neón (glow più delicato) */
+    .matrix-glow-text {
+        color: #00cc00;
+        animation: matrix-glow 3s ease-in-out infinite alternate;
+        text-shadow: 0 0 2px rgba(0, 204, 0, 0.9);
+    }
+
+    /* Stile personalizzato per gli elementi delle attività */
+    .activity-item-matrix {
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 255, 0, 0.2);
+        color: #ffffff;
         transition: all 0.3s ease;
     }
 
-    .activity-item:hover {
-        background-color: rgba(102, 126, 234, 0.05);
-        transform: translateX(5px);
+    .activity-item-matrix:hover {
+        background: rgba(0, 255, 0, 0.08);
+        transform: translateX(3px);
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.25);
     }
 
+    /* Stili personalizzati per la scrollbar delle attività */
     .activities-container::-webkit-scrollbar {
         width: 8px;
     }
     .activities-container::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-    .activities-container::-webkit-scrollbar-thumb {
-        background: #888;
+        background: rgba(0, 0, 0, 0.3);
         border-radius: 4px;
     }
+    .activities-container::-webkit-scrollbar-thumb {
+        background: rgba(0, 255, 0, 0.5);
+        border-radius: 4px;
+        border: 1px solid #00ff00;
+    }
     .activities-container::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        background: rgba(0, 255, 0, 0.7);
     }
 
-    .fa-user-circle {
-        animation: float 3s ease-in-out infinite;
+    /* Stili per i badge */
+    .badge {
+        background: rgba(0, 0, 0, 0.7) !important;
+        border: 1px solid #00cc00;
+        color: #00cc00 !important;
+    }
+    
+    /* Miglioramento contrasto per testi */
+    .text-muted {
+        color: #b0b0b0 !important;
     }
 
-    .fa-trophy {
-        animation: pulse 2s infinite;
+    /* Effetti hover per i pulsanti */
+    .btn-matrix {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-matrix::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-matrix:hover::before {
+        left: 100%;
     }
 </style>
 {% endblock %}

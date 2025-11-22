@@ -2,32 +2,32 @@
 
 {% block title %}Quiz - Kodland{% endblock %}
 
-{% block body_class %}quiz-page{% endblock %}
+{% block body_class %}quiz-matrix{% endblock %}
 
 {% block content %}
-<!-- Start Screen -->
+<!-- Schermata di inizio del quiz -->
 <div id="startScreen" class="text-center">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card modern-card border-0 shadow-lg">
+            <div class="card matrix-card border-0 shadow-lg">
                 <div class="card-body p-5">
                     <div class="mb-4">
-                        <i class="fas fa-brain text-primary mb-3" style="font-size: 4rem;"></i>
+                        <i class="fas fa-brain mb-3" style="font-size: 4rem; color: #e0e0e0;"></i>
                     </div>
-                    <h1 class="card-title fw-bold text-primary">🤖 Quiz AI e Python</h1>
-                    <p class="card-text text-muted">Testa le tue conoscenze su Sviluppo di Intelligenza Artificiale in Python!</p>
-                    <div class="alert alert-info border-0 mt-4">
-                        <h5 class="text-primary"><i class="fas fa-info-circle me-2"></i>Come funziona:</h5>
-                        <ul class="text-start mt-3">
-                            <li><i class="fas fa-check text-success me-2"></i>30 domande casuali su AI e Python Development</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Ogni risposta corretta vale 2 punti</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Puoi cambiare risposta prima di procedere</li>
-                            <li><i class="fas fa-check text-success me-2"></i>I tuoi punti vengono sommati al totale del profilo</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Puoi fermarti in qualsiasi momento</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Alla fine puoi rivedere tutte le risposte</li>
+                    <h1 class="card-title orbitron fw-bold matrix-glow-text">🤖 Quiz AI e Python</h1>
+                    <p class="card-text" style="color: #d0d0d0;">Testa le tue conoscenze su Sviluppo di Intelligenza Artificiale in Python!</p>
+                    <div class="alert matrix-card border-0 mt-4">
+                        <h5 class="matrix-glow-text"><i class="fas fa-info-circle me-2"></i>Come funziona:</h5>
+                        <ul class="text-start mt-3" style="color: #e0e0e0;">
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>30 domande casuali su AI e Python Development</li>
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>Ogni risposta corretta vale 2 punti</li>
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>Puoi cambiare risposta prima di procedere</li>
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>I tuoi punti vengono sommati al totale del profilo</li>
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>Puoi fermarti in qualsiasi momento</li>
+                            <li><i class="fas fa-check me-2" style="color: #e0e0e0;"></i>Alla fine puoi rivedere tutte le risposte</li>
                         </ul>
                     </div>
-                    <button id="startQuizBtn" class="btn btn-success btn-lg shadow">
+                    <button id="startQuizBtn" class="btn btn-matrix btn-lg shadow">
                         <i class="fas fa-rocket me-2"></i>Inizia Quiz
                     </button>
                 </div>
@@ -36,34 +36,34 @@
     </div>
 </div>
 
-<!-- Quiz Screen -->
+<!-- Schermata quiz attiva -->
 <div id="quizScreen" style="display: none;">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <!-- Quiz Header -->
-            <div class="card modern-card border-0 shadow-sm mb-4">
+            <!-- Header del quiz con barra di progresso -->
+            <div class="card matrix-card border-0 shadow-sm mb-4">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4><i class="fas fa-question-circle text-primary me-2"></i>Domanda <span id="currentQuestionNum">1</span> di <span id="totalQuestions">30</span></h4>
+                        <h4><i class="fas fa-question-circle me-2" style="color: #e0e0e0;"></i>Domanda <span id="currentQuestionNum">1</span> di <span id="totalQuestions">30</span></h4>
                     </div>
                     <div class="progress mt-3">
-                        <div id="progressBar" class="progress-bar bg-primary" role="progressbar" style="width: 3.33%"></div>
+                        <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 3.33%"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Question Card -->
-            <div class="card modern-card border-0 shadow-lg">
+            <!-- Carta della domanda -->
+            <div class="card matrix-card border-0 shadow-lg">
                 <div class="card-body p-4">
-                    <h5 id="questionText" class="card-title fw-bold text-primary mb-4">Caricamento domanda...</h5>
+                    <h5 id="questionText" class="card-title orbitron fw-bold matrix-glow-text mb-4">Caricamento domanda...</h5>
                     <div id="optionsContainer" class="d-grid gap-3">
-                        <!-- Options will be inserted here -->
+                        <!-- Le opzioni verranno inserite qui dinamicamente -->
                     </div>
                     <div class="text-center mt-4">
-                        <button id="nextQuestionBtn" class="btn btn-primary me-2" disabled>
+                        <button id="nextQuestionBtn" class="btn btn-matrix me-2" disabled>
                             <i class="fas fa-arrow-right me-2"></i>Domanda Successiva
                         </button>
-                        <button id="finishQuizBtn" class="btn btn-danger">
+                        <button id="finishQuizBtn" class="btn btn-outline-danger">
                             <i class="fas fa-stop me-2"></i>Termina Quiz
                         </button>
                     </div>
@@ -73,26 +73,26 @@
     </div>
 </div>
 
-<!-- Completion Screen -->
+<!-- Schermata di completamento -->
 <div id="completionScreen" style="display: none;">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card modern-card border-0 shadow-lg">
+            <div class="card matrix-card border-0 shadow-lg">
                 <div class="card-body text-center p-5">
                     <div class="mb-4">
-                        <h1 class="display-4">🎉</h1>
-                        <h2 class="text-primary fw-bold">Grazie per aver partecipato!</h2>
+                        <h1 class="display-4 matrix-icon" style="color: #00ff00;">🎉</h1>
+                        <h2 class="orbitron fw-bold matrix-glow-text">Grazie per aver partecipato!</h2>
                     </div>
                     <div class="alert alert-success border-0 shadow-sm">
-                        <h4 class="fw-bold">Hai totalizzato: <span id="finalScore">0</span> punti!</h4>
+                        <h4 class="fw-bold matrix-glow-text">Hai totalizzato: <span id="finalScore">0</span> punti!</h4>
                         <p class="mb-0">I tuoi punti sono stati aggiunti al tuo profilo.</p>
                     </div>
                     <div class="mt-4">
                         <div class="d-grid gap-3">
-                            <button id="reviewAnswersBtn" class="btn btn-info btn-lg shadow">
+                            <button id="reviewAnswersBtn" class="btn btn-matrix btn-lg shadow">
                                 <i class="fas fa-search me-2"></i>Rivedi le Risposte
                             </button>
-                            <button id="playAgainBtn" class="btn btn-success btn-lg shadow">
+                            <button id="playAgainBtn" class="btn btn-matrix btn-lg shadow">
                                 <i class="fas fa-redo me-2"></i>Gioca Ancora
                             </button>
                         </div>
@@ -103,45 +103,45 @@
     </div>
 </div>
 
-<!-- Review Screen -->
+<!-- Schermata di revisione risposte -->
 <div id="reviewScreen" style="display: none;">
     <div class="row">
         <div class="col-md-8">
-            <div class="card modern-card border-0 shadow-lg">
-                <div class="card-header text-white d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+            <div class="card matrix-card border-0 shadow-lg">
+                <div class="card-header text-white d-flex justify-content-between align-items-center matrix-header">
                     <h4 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Revisione delle Risposte</h4>
-                    <button id="backToCompletionBtn" class="btn btn-light btn-sm">
+                    <button id="backToCompletionBtn" class="btn btn-outline-light btn-sm">
                         <i class="fas fa-arrow-left me-1"></i>Indietro
                     </button>
                 </div>
                 <div class="card-body p-4">
                     <div id="reviewContent">
-                        <!-- Review content will be inserted here -->
+                        <!-- Il contenuto di revisione verrà inserito qui -->
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card modern-card border-0 shadow-lg">
-                <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px 20px 0 0;">
+            <div class="card matrix-card border-0 shadow-lg">
+                <div class="card-header text-white matrix-header">
                     <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Statistiche</h5>
                 </div>
                 <div class="card-body p-4">
                     <div class="text-center mb-4">
-                        <div class="display-6 text-success fw-bold"><span id="correctCount">0</span></div>
+                        <div class="display-6 text-success orbitron fw-bold"><span id="correctCount">0</span></div>
                         <small class="text-muted">Risposte Corrette</small>
                     </div>
                     <div class="text-center mb-4">
-                        <div class="display-6 text-danger fw-bold"><span id="incorrectCount">0</span></div>
+                        <div class="display-6 text-danger orbitron fw-bold"><span id="incorrectCount">0</span></div>
                         <small class="text-muted">Risposte Sbagliate</small>
                     </div>
                     <div class="text-center mb-4">
-                        <div class="display-6 text-primary fw-bold"><span id="reviewScore">0</span></div>
+                        <div class="display-6 matrix-glow-text orbitron fw-bold"><span id="reviewScore">0</span></div>
                         <small class="text-muted">Punteggio Totale</small>
                     </div>
-                    <hr>
+                    <hr style="border-color: #00ff00;">
                     <div class="d-grid gap-2">
-                        <button id="reviewPlayAgainBtn" class="btn btn-success shadow">
+                        <button id="reviewPlayAgainBtn" class="btn btn-matrix shadow">
                             <i class="fas fa-redo me-2"></i>Nuovo Quiz
                         </button>
                     </div>
@@ -154,14 +154,14 @@
 
 {% block scripts %}
 <script>
-    // Quiz State
+    // Stato del quiz
     let questions = [];
     let currentQuestionIndex = 0;
     let score = 0;
     let totalQuestions = 30;
-    let userAnswers = []; // Store all user answers
+    let userAnswers = []; // Memorizza tutte le risposte dell'utente
 
-    // DOM Elements
+    // Elementi DOM per il quiz
     const startScreen = document.getElementById('startScreen');
     const quizScreen = document.getElementById('quizScreen');
     const completionScreen = document.getElementById('completionScreen');
@@ -169,7 +169,6 @@
     const startQuizBtn = document.getElementById('startQuizBtn');
     const currentQuestionNum = document.getElementById('currentQuestionNum');
     const totalQuestionsEl = document.getElementById('totalQuestions');
-    const currentScore = document.getElementById('currentScore');
     const progressBar = document.getElementById('progressBar');
     const questionText = document.getElementById('questionText');
     const optionsContainer = document.getElementById('optionsContainer');
@@ -185,7 +184,7 @@
     const backToCompletionBtn = document.getElementById('backToCompletionBtn');
     const reviewPlayAgainBtn = document.getElementById('reviewPlayAgainBtn');
 
-    // Start Quiz
+    // Avvia il quiz
     startQuizBtn.addEventListener('click', async function() {
         try {
             const response = await fetch('/api/quiz/questions');
@@ -193,6 +192,7 @@
             totalQuestions = questions.length;
             totalQuestionsEl.textContent = totalQuestions;
             
+            // Reset stato del quiz
             startScreen.style.display = 'none';
             quizScreen.style.display = 'block';
             currentQuestionIndex = 0;
@@ -205,7 +205,7 @@
         }
     });
 
-    // Load Question
+    // Carica la domanda corrente
     function loadQuestion() {
         if (currentQuestionIndex >= totalQuestions) {
             completeQuiz();
@@ -215,71 +215,71 @@
         const question = questions[currentQuestionIndex];
         currentQuestionNum.textContent = currentQuestionIndex + 1;
         
-        // Update progress bar
+        // Aggiorna la barra di progresso
         const progress = ((currentQuestionIndex + 1) / totalQuestions) * 100;
         progressBar.style.width = progress + '%';
         
         questionText.textContent = question.question;
         
-        // Clear previous options
+        // Pulisci le opzioni precedenti
         optionsContainer.innerHTML = '';
         nextQuestionBtn.disabled = false;
         
-        // Check if user already answered this question
+        // Controlla se l'utente ha già risposto a questa domanda
         const userAnswer = userAnswers[currentQuestionIndex];
         
-        // Create options
+        // Crea le opzioni di risposta
         question.options.forEach((option, index) => {
             const button = document.createElement('button');
             button.type = 'button';
-            button.className = 'btn btn-outline-primary btn-lg text-start';
+            button.className = 'btn btn-outline-success btn-lg text-start option-btn';
             button.textContent = option;
             button.addEventListener('click', () => selectAnswer(index, question.correct));
             
-            // Pre-select if user already answered
+            // Pre-seleziona se l'utente ha già risposto
             if (userAnswer === index) {
-                button.classList.remove('btn-outline-primary');
-                button.classList.add('btn-primary', 'text-white');
+                button.classList.remove('btn-outline-success');
+                button.classList.add('btn-success', 'text-white');
             }
             
             optionsContainer.appendChild(button);
         });
     }
 
-    // Select Answer (allow changing)
+    // Seleziona una risposta (permette di cambiare)
     function selectAnswer(selectedIndex, correctIndex) {
         const buttons = optionsContainer.querySelectorAll('button');
         
-        // Remove previous selection
+        // Rimuovi la selezione precedente
         buttons.forEach(btn => {
-            btn.classList.remove('btn-primary', 'text-white');
-            btn.classList.add('btn-outline-primary');
+            btn.classList.remove('btn-success', 'text-white');
+            btn.classList.add('btn-outline-success');
         });
         
-        // Highlight selected answer
-        buttons[selectedIndex].classList.remove('btn-outline-primary');
-        buttons[selectedIndex].classList.add('btn-primary', 'text-white');
+        // Evidenzia la risposta selezionata
+        buttons[selectedIndex].classList.remove('btn-outline-success');
+        buttons[selectedIndex].classList.add('btn-success', 'text-white');
         
-        // Store user answer
+        // Memorizza la risposta dell'utente
         userAnswers[currentQuestionIndex] = selectedIndex;
     }
 
-    // Next Question
+    // Vai alla domanda successiva
     nextQuestionBtn.addEventListener('click', function() {
         currentQuestionIndex++;
         loadQuestion();
     });
 
-    // Finish Quiz
+    // Termina il quiz
     finishQuizBtn.addEventListener('click', function() {
         if (confirm('Sei sicuro di voler terminare il quiz?')) {
             completeQuiz();
         }
     });
 
-    // Complete Quiz
+    // Completa il quiz
     async function completeQuiz() {
-        // Calculate final score
+        // Calcola il punteggio finale
         score = 0;
         for (let i = 0; i < userAnswers.length; i++) {
             if (userAnswers[i] === questions[i].correct) {
@@ -288,7 +288,7 @@
         }
 
         try {
-            // Submit score to backend
+            // Invia il punteggio al backend
             const response = await fetch('/api/quiz/submit', {
                 method: 'POST',
                 headers: {
@@ -302,6 +302,7 @@
             
             const result = await response.json();
             
+            // Mostra la schermata di completamento
             quizScreen.style.display = 'none';
             completionScreen.style.display = 'block';
             finalScore.textContent = score;
@@ -314,20 +315,20 @@
         }
     }
 
-    // Play Again
+    // Gioca ancora
     playAgainBtn.addEventListener('click', function() {
         completionScreen.style.display = 'none';
         startScreen.style.display = 'block';
     });
 
-    // Review Answers
+    // Rivedi le risposte
     reviewAnswersBtn.addEventListener('click', function() {
         completionScreen.style.display = 'none';
         reviewScreen.style.display = 'block';
         generateReview();
     });
 
-    // Generate Review
+    // Genera la revisione delle risposte
     function generateReview() {
         let correct = 0;
         let totalScore = 0;
@@ -369,13 +370,13 @@
         reviewScore.textContent = totalScore;
     }
 
-    // Back to Completion
+    // Torna al completamento
     backToCompletionBtn.addEventListener('click', function() {
         reviewScreen.style.display = 'none';
         completionScreen.style.display = 'block';
     });
 
-    // Review Play Again
+    // Nuovo quiz dalla revisione
     reviewPlayAgainBtn.addEventListener('click', function() {
         reviewScreen.style.display = 'none';
         startScreen.style.display = 'block';
@@ -385,33 +386,129 @@
 
 {% block styles %}
 <style>
-    body.quiz-page {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* Stili specifici per la pagina quiz */
+    body.quiz-matrix {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
     }
 
+    .matrix-header {
+        background: linear-gradient(135deg, #00ff00, #008800) !important;
+        border-radius: 15px 15px 0 0;
+    }
+
+    /* Effetti grafici per le icone del quiz */
+    .matrix-icon {
+        animation: matrix-glow 2s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 3px rgba(0, 204, 0, 0.7));
+    }
+
+    /* Testo con effetto neón (glow più delicato) */
+    .matrix-glow-text {
+        color: #00cc00;
+        animation: matrix-glow 3s ease-in-out infinite alternate;
+        text-shadow: 0 0 2px rgba(0, 204, 0, 0.9);
+    }
+
+    /* Stili per la barra di progresso del quiz */
     .progress {
         height: 8px;
         border-radius: 4px;
+        background: rgba(0, 255, 0, 0.1);
+        border: 1px solid rgba(0, 255, 0, 0.3);
     }
 
     .progress-bar {
         border-radius: 4px;
+        background: linear-gradient(135deg, #00cc00, #008800);
+        box-shadow: 0 0 6px rgba(0, 255, 0, 0.35);
     }
 
+    /* Stili per i pulsanti delle opzioni del quiz */
+    .option-btn {
+        border: 2px solid rgba(0, 255, 0, 0.3);
+        background: rgba(0, 0, 0, 0.7);
+        color: #00ff00;
+        transition: all 0.3s ease;
+    }
+
+    .option-btn:hover {
+        border-color: #00cc00;
+        background: rgba(0, 255, 0, 0.08);
+        color: #00cc00;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.25);
+    }
+
+    .option-btn.btn-success {
+        background: linear-gradient(135deg, #00cc00, #008800);
+        border-color: #00cc00;
+        color: #000;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+    }
+
+    /* Stili per i list-group item */
     .list-group-item {
         border-radius: 8px;
         margin-bottom: 2px;
     }
 
+    /* Stili per gli alert informativi del quiz */
     .alert {
         border-radius: 10px;
-        border: none;
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        background: rgba(0, 0, 0, 0.7);
+        color: #00cc00;
+    }
+    
+    /* Miglioramento contrasto per testi */
+    .text-muted {
+        color: #b0b0b0 !important;
+    }
+    
+    .card-text.text-muted {
+        color: #b0b0b0 !important;
     }
 
-    .fa-brain {
-        animation: float 3s ease-in-out infinite;
+    /* Effetti speciali per i pulsanti del quiz */
+    .btn-matrix {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-matrix::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-matrix:hover::before {
+        left: 100%;
+    }
+
+    /* Stili per i card di revisione */
+    .card.border-success {
+        border: 2px solid #00ff00 !important;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    .card.border-danger {
+        border: 2px solid #ff4444 !important;
+        box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+    }
+
+    /* Effetti hover per i pulsanti outline */
+    .btn-outline-danger:hover {
+        background: #ff4444;
+        border-color: #ff4444;
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
     }
 </style>
 {% endblock %}

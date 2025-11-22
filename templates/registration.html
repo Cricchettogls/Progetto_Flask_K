@@ -2,22 +2,25 @@
 
 {% block title %}Registrati - Kodland{% endblock %}
 
-{% block body_class %}auth-page{% endblock %}
+{% block body_class %}auth-matrix{% endblock %}
 
 {% block content %}
+<!-- Form di registrazione dell'utente -->
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <div class="card modern-card border-0 shadow-lg">
+        <div class="card matrix-card border-0 shadow-lg">
             <div class="card-body p-5">
                 <div class="text-center mb-4">
-                    <i class="fas fa-user-plus text-primary mb-3" style="font-size: 3rem;"></i>
-                    <h1 class="card-title fw-bold text-primary">Registrati</h1>
-                    <p class="text-muted">Crea il tuo account per iniziare</p>
+                    <i class="fas fa-user-plus matrix-icon mb-3" style="font-size: 3rem; color: #00ff00;"></i>
+                    <h1 class="card-title orbitron fw-bold matrix-glow-text">Registrati</h1>
+                    <p class="text-muted">Crea il tuo account Matrix per iniziare</p>
                 </div>
+                
+                <!-- Messaggi flash -->
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}
                         {% for category, message in messages %}
-                            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
+                            <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} matrix-alert alert-dismissible fade show" role="alert">
                                 <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'check-circle' }} me-2"></i>
                                 {{ message }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -25,52 +28,61 @@
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
+                
+                <!-- Form di registrazione -->
                 <form method="POST" action="{{ url_for('registration') }}" class="auth-form">
+                    <!-- Campo nickname con autocomplete -->
                     <div class="mb-3 position-relative">
-                        <label for="nickname" class="form-label">
+                        <label for="nickname" class="form-label orbitron">
                             <i class="fas fa-user-tag me-1"></i>Nickname
                         </label>
-                        <input type="text" class="form-control modern-input" name="nickname" id="nickname" required autocomplete="off" placeholder="Scegli un nickname unico">
+                        <input type="text" class="form-control input-matrix" name="nickname" id="nickname" required autocomplete="off" placeholder="Scegli un nickname unico">
                         <div id="nicknameSuggestions" class="list-group position-absolute w-100" style="z-index: 1000; top: 100%; display: none;"></div>
                     </div>
                     
+                    <!-- Avviso nickname -->
                     <div class="mb-3">
-                        <div id="nicknameWarning" class="alert alert-warning alert-dismissible fade show" style="display: none;" role="alert">
+                        <div id="nicknameWarning" class="alert matrix-warning alert-dismissible fade show" style="display: none;" role="alert">
                             <i class="fas fa-exclamation-triangle me-2"></i>
                             <strong>Attenzione!</strong> Il nickname deve essere unico. Non puoi utilizzare un nickname già in uso da un altro utente.
                             <button type="button" class="btn-close" onclick="document.getElementById('nicknameWarning').style.display='none'"></button>
                         </div>
                     </div>
                     
+                    <!-- Campo email -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">
+                        <label for="email" class="form-label orbitron">
                             <i class="fas fa-envelope me-1"></i>Email
                         </label>
-                        <input type="email" class="form-control modern-input" name="email" id="email" required placeholder="la-tua-email@esempio.com">
+                        <input type="email" class="form-control input-matrix" name="email" id="email" required placeholder="la-tua-email@esempio.com">
                     </div>
                     
+                    <!-- Campo password -->
                     <div class="mb-3">
-                        <label for="password" class="form-label">
+                        <label for="password" class="form-label orbitron">
                             <i class="fas fa-lock me-1"></i>Password
                         </label>
-                        <input type="password" class="form-control modern-input" name="password" id="password" required placeholder="Almeno 6 caratteri">
+                        <input type="password" class="form-control input-matrix" name="password" id="password" required placeholder="Almeno 6 caratteri">
                     </div>
                     
+                    <!-- Campo conferma password -->
                     <div class="mb-4">
-                        <label for="confirmPassword" class="form-label">
+                        <label for="confirmPassword" class="form-label orbitron">
                             <i class="fas fa-lock me-1"></i>Conferma Password
                         </label>
-                        <input type="password" class="form-control modern-input" name="confirmPassword" id="confirmPassword" required placeholder="Ripeti la password">
+                        <input type="password" class="form-control input-matrix" name="confirmPassword" id="confirmPassword" required placeholder="Ripeti la password">
                     </div>
                     
-                    <button type="submit" class="btn btn-success w-100 btn-lg">
+                    <!-- Pulsante di registrazione -->
+                    <button type="submit" class="btn btn-matrix w-100 btn-lg">
                         <i class="fas fa-user-plus me-2"></i>Registrati
                     </button>
                 </form>
                 
+                <!-- Link login -->
                 <div class="text-center mt-4">
                     <p class="text-muted">Hai già un account? 
-                        <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">
+                        <a href="{{ url_for('login') }}" class="text-decoration-none matrix-link orbitron">
                             <i class="fas fa-sign-in-alt me-1"></i>Accedi qui
                         </a>
                     </p>
@@ -83,24 +95,25 @@
 
 {% block scripts %}
 <script>
+    // Gestione degli elementi per l'autocomplete del nickname
     const nicknameInput = document.getElementById('nickname');
     const nicknameSuggestions = document.getElementById('nicknameSuggestions');
     const nicknameWarning = document.getElementById('nicknameWarning');
     let selectedIndex = -1;
 
-    // Show warning when clicking on nickname field
+    // Mostra l'avviso quando si clicca sul campo nickname
     nicknameInput.addEventListener('focus', function() {
         nicknameWarning.style.display = 'block';
     });
 
-    // Hide warning after 5 seconds
+    // Nascondi l'avviso dopo 5 secondi
     setTimeout(() => {
         if (nicknameWarning.style.display === 'block') {
             nicknameWarning.style.display = 'none';
         }
     }, 5000);
 
-    // Nickname autocomplete functionality
+    // Funzionalità autocomplete per il nickname
     nicknameInput.addEventListener('input', function() {
         const query = this.value.trim();
         if (query.length < 2) {
@@ -116,7 +129,7 @@
                     data.forEach((nickname, index) => {
                         const item = document.createElement('a');
                         item.href = '#';
-                        item.className = 'list-group-item list-group-item-action';
+                        item.className = 'list-group-item list-group-item-action matrix-item';
                         item.textContent = nickname;
                         item.addEventListener('click', function(e) {
                             e.preventDefault();
@@ -135,14 +148,14 @@
             });
     });
 
-    // Hide suggestions when clicking outside
+    // Nascondi i suggerimenti quando si clicca fuori
     document.addEventListener('click', function(e) {
         if (!nicknameInput.contains(e.target) && !nicknameSuggestions.contains(e.target)) {
             nicknameSuggestions.style.display = 'none';
         }
     });
 
-    // Keyboard navigation for suggestions
+    // Navigazione da tastiera per i suggerimenti
     nicknameInput.addEventListener('keydown', function(e) {
         const items = nicknameSuggestions.querySelectorAll('.list-group-item');
         if (items.length === 0) return;
@@ -164,6 +177,7 @@
         }
     });
 
+    // Aggiorna la selezione visiva dei suggerimenti
     function updateSelection(items) {
         items.forEach((item, index) => {
             if (index === selectedIndex) {
@@ -178,53 +192,197 @@
 
 {% block styles %}
 <style>
-    body.auth-page {
-        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    /* Stili specifici per la pagina di registrazione */
+    body.auth-matrix {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
         min-height: 100vh;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #ffffff;
     }
 
-    .modern-input {
-        border-radius: 10px;
-        border: 2px solid #e9ecef;
-        padding: 12px 15px;
+    /* Effetti grafici per le icone di registrazione */
+    .matrix-icon {
+        animation: matrix-glow 2s ease-in-out infinite alternate;
+        filter: drop-shadow(0 0 3px rgba(0, 204, 0, 0.7));
+    }
+
+    /* Testo con effetto neón (glow più delicato) */
+    .matrix-glow-text {
+        color: #00cc00;
+        animation: matrix-glow 3s ease-in-out infinite alternate;
+        text-shadow: 0 0 2px rgba(0, 204, 0, 0.9);
+    }
+
+    /* Stile personalizzato per i link di registrazione */
+    .matrix-link {
+        color: #00cc00 !important;
         transition: all 0.3s ease;
-        font-size: 16px;
+        position: relative;
+        overflow: hidden;
     }
-
-    .modern-input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+ 
+    .matrix-link:hover {
+        color: #00cc00 !important;
+        text-shadow: 0 0 4px rgba(0, 204, 0, 0.9);
         transform: translateY(-2px);
     }
 
-    .form-label {
-        font-weight: 600;
-        color: #495057;
-        margin-bottom: 8px;
+    .matrix-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -100%;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #00ff00, transparent);
+        transition: left 0.3s ease;
     }
 
+    .matrix-link:hover::after {
+        left: 100%;
+    }
+
+    /* Alert personalizzati per i messaggi di registrazione */
+    .matrix-alert {
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        color: #00cc00;
+        border-radius: 10px;
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+    }
+    
+    .matrix-alert .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.8;
+    }
+    
+    .matrix-alert .btn-close:hover {
+        opacity: 1;
+    }
+
+    .alert-danger.matrix-alert {
+        border: 1px solid rgba(255, 68, 68, 0.5);
+        color: #ff4444;
+        box-shadow: 0 0 15px rgba(255, 68, 68, 0.2);
+    }
+    
+    .alert-danger.matrix-alert .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.8;
+    }
+
+    /* Alert di avviso per il nickname */
+    .matrix-warning {
+        background: rgba(255, 165, 0, 0.1);
+        border: 1px solid rgba(255, 165, 0, 0.5);
+        color: #ffa500;
+        box-shadow: 0 0 15px rgba(255, 165, 0, 0.2);
+    }
+
+    /* Effetti hover per il form di registrazione */
     .auth-form {
         margin-top: 20px;
     }
 
+    /* Effetti di scansione per i bottoni */
+    .btn-matrix {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #00cc00, #008800);
+        border: 1px solid #00cc00;
+        color: #000;
+        font-weight: 600;
+    }
+
+    .btn-matrix::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .btn-matrix:hover::before {
+        left: 100%;
+    }
+
+    .btn-matrix:hover {
+        background: linear-gradient(135deg, #00dd00, #009900);
+        border-color: #00cc00;
+        color: #000;
+        box-shadow: 0 6px 16px rgba(0, 204, 0, 0.3);
+        transform: translateY(-2px);
+    }
+
+    /* Animazioni sugli input del form */
+    .input-matrix:focus {
+        border-color: #00cc00;
+        box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.25), 0 0 8px rgba(0, 255, 0, 0.25);
+        background: rgba(0, 0, 0, 0.9);
+        color: #00cc00;
+    }
+
+    .input-matrix::placeholder {
+        color: rgba(0, 255, 0, 0.5);
+    }
+
+    /* Label dei campi del form di registrazione */
+    .form-label {
+        font-weight: 600;
+        color: #00cc00;
+        margin-bottom: 8px;
+        text-shadow: 0 0 2px rgba(0, 204, 0, 0.8);
+    }
+    
+    /* Miglioramento contrasto per testi */
+    .text-muted {
+        color: #b0b0b0 !important;
+    }
+    
+    .card-text.text-muted {
+        color: #b0b0b0 !important;
+    }
+
+    /* Stili personalizzati per i suggerimenti di nickname */
+    .matrix-item {
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(0, 255, 0, 0.3);
+        color: #00ff00;
+        transition: all 0.3s ease;
+    }
+
+    .matrix-item:hover {
+        background: rgba(0, 255, 0, 0.08);
+        color: #00cc00;
+        border-color: #00cc00;
+        box-shadow: 0 0 6px rgba(0, 255, 0, 0.25);
+    }
+ 
+    .matrix-item.active {
+        background: rgba(0, 255, 0, 0.15);
+        color: #00cc00;
+        border-color: #00cc00;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+
+    /* List group item stili */
     .list-group-item {
         border-radius: 8px;
         margin-bottom: 2px;
     }
 
-    .alert {
-        border-radius: 10px;
-        border: none;
+    /* Effetti di validazione dei campi */
+    .input-matrix:valid {
+        border-color: #00ff00;
+        box-shadow: 0 0 0 0.2rem rgba(0, 255, 0, 0.25);
     }
 
-    .alert-warning {
-        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-        color: #856404;
-    }
-
-    .fa-user-plus {
-        animation: float 3s ease-in-out infinite;
+    .input-matrix:invalid:not(:placeholder-shown) {
+        border-color: #ff4444;
+        box-shadow: 0 0 0 0.2rem rgba(255, 68, 68, 0.25);
     }
 </style>
 {% endblock %}
